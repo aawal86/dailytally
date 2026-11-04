@@ -1,17 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="bn" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>আবদুল আউয়াল - সমন্বিত হিসাব খাতা ড্যাশবোর্ড</title>
-    
-    <!-- External Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Lateef:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Reem+Kufi:wght@400;600;700&family=Sora:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind CSS for Daily Tally section -->
+    <title>দৈনিক হিসাব খাতা - ক্লাউড সংস্করণ</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -20,7 +14,12 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46',
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
                         }
                     },
                     fontFamily: {
@@ -30,1362 +29,411 @@
             }
         }
     </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Shared Master Navigation Styles */
-        body { margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; }
-        .master-nav-bar {
-            position: sticky;
-            top: 0;
-            z-index: 99999;
-            background: #0f172a;
-            border-bottom: 2px solid #059669;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .master-brand {
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .master-tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            max-width: 100%;
-            padding-bottom: 2px;
-        }
-        .master-tab-btn {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .master-tab-btn:hover { background: #334155; color: #fff; }
-        .master-tab-btn.active {
-            background: #059669;
-            color: #ffffff;
-            border-color: #10b981;
-            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
-        }
-        .app-container { display: none; width: 100%; }
-        .app-container.active-app { display: block; }
-
-        /* ==========================================================================
-           1. STYLES FOR ACCOUNTS (DASHBOARD)
-           ========================================================================== */
-        .acc-scope {
-            --accent:#0b8f6c;--accent-2:#6b5bff;--amber:#d98a00;--bg-color:#eceee8;--card-bg:#ffffff;--card-2:#f6f7f3;--text-main:#0e1512;--text-muted:#5f6b64;--border-color:#dde2d8;--primary:#0b8f6c;--table-header:#f6f7f3;--radius:22px;--r-sm:12px;--shadow:0 1px 0 rgba(255,255,255,.8) inset,0 18px 40px -18px rgba(14,21,18,.18);--f-body:'Sora','Anek Bangla',system-ui,sans-serif;--f-mono:'IBM Plex Mono','Anek Bangla',ui-monospace,monospace;--f-arabic:'Reem Kufi','Amiri',serif;--ease:cubic-bezier(.2,.8,.2,1);
-            background:var(--bg-color);color:var(--text-main);line-height:1.6;font-size:14px;padding:10px 10px 120px;position:relative;overflow-x:hidden;min-height:100vh;
-        }
-        .acc-scope[data-theme="dark"]{--accent:#3ee6b0;--accent-2:#9a8cff;--amber:#ffb547;--bg-color:#060a09;--card-bg:#0f1614;--card-2:#131c19;--text-main:#e9f3ef;--text-muted:#86a095;--border-color:#1f2c28;--primary:#3ee6b0;--table-header:#131c19;--shadow:0 1px 0 rgba(255,255,255,.04) inset,0 24px 50px -24px rgba(0,0,0,.8)}
-        .acc-scope .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-        .acc-scope .aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35}
-        .acc-scope .aurora i:nth-child(1){width:460px;height:460px;background:var(--accent);top:-180px;left:-120px;animation:drift 22s ease-in-out infinite}
-        .acc-scope .aurora i:nth-child(2){width:420px;height:420px;background:var(--accent-2);top:20%;right:-180px;animation:drift 26s ease-in-out infinite reverse}
-        .acc-scope[data-theme="dark"] .aurora i{opacity:.16}
-        @keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,40px)}}
-        @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-        .acc-scope .container{position:relative;z-index:1;width:100%;max-width:640px;margin:0 auto}
-        @media(min-width:900px){.acc-scope{padding:18px 24px 130px}.acc-scope .container{max-width:1120px}}
-        .acc-scope .bismillah-banner{position:relative;overflow:hidden;text-align:center;padding:18px 20px;margin-bottom:14px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border-color);box-shadow:var(--shadow);animation:rise .5s var(--ease) both}
-        .acc-scope .bismillah-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 8%,transparent),color-mix(in srgb,var(--accent-2) 6%,transparent));pointer-events:none}
-        .acc-scope .bismillah-arabic{font-family:var(--f-arabic);font-size:clamp(22px,4.5vw,30px);font-weight:700;letter-spacing:.02em;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;line-height:1.3}
-        .acc-scope .bismillah-meaning{font-size:11.5px;color:var(--text-muted);font-weight:600;letter-spacing:.01em}
-        .acc-scope .print-header{display:none;text-align:center;margin-bottom:20px;border-bottom:2px solid #000;padding-bottom:10px}
-        .acc-scope .print-header h1{font-size:20px;font-weight:700;margin-bottom:4px}
-        .acc-scope .print-header .print-timestamp{font-size:12px;color:#444}
-        .acc-scope .navbar{position:sticky;top:50px;z-index:1000;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:9px 10px 9px 14px;border-radius:99px;border:1px solid var(--border-color);background:color-mix(in srgb,var(--card-bg) 78%,transparent);backdrop-filter:blur(16px) saturate(160%);box-shadow:var(--shadow);animation:rise .6s var(--ease) both}
-        .acc-scope .nav-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;letter-spacing:-.01em}
-        .acc-scope .nav-brand .logo{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:13px;color:#04120d;background:linear-gradient(135deg,var(--accent),var(--accent-2));transform:rotate(-6deg)}
-        .acc-scope .nav-controls{display:flex;gap:6px;align-items:center}
-        .acc-scope .nav-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;font-size:14px;background:var(--card-2);border:1px solid var(--border-color);color:var(--text-main);transition:transform .2s var(--ease),background .2s,border-color .2s}
-        .acc-scope .nav-btn:hover{border-color:var(--accent);transform:translateY(-2px)}
-        .acc-scope .hero{position:relative;overflow:hidden;border-radius:30px;padding:26px 20px 20px;margin-bottom:14px;color:#eaf5f0;background:linear-gradient(140deg,#07110e 0%,#0c1a2c 60%,#171233 100%);animation:rise .7s .05s var(--ease) both;box-shadow:0 30px 60px -30px rgba(7,17,14,.7)}
-        .acc-scope .hero::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-140px;top:-200px;background:radial-gradient(circle,rgba(62,230,176,.55),transparent 65%)}
-        .acc-scope .kicker{display:inline-flex;align-items:center;gap:8px;font:500 11px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:#8fe9c8;padding:6px 12px;border:1px solid rgba(143,233,200,.3);border-radius:99px;background:rgba(62,230,176,.08)}
-        .acc-scope .kicker .dot{width:7px;height:7px;border-radius:50%;background:#3ee6b0;animation:blink 1.8s infinite}
-        .acc-scope .hero h1{font-size:clamp(28px,6vw,52px);font-weight:800;line-height:1.05;letter-spacing:-.035em;margin:16px 0 22px}
-        .acc-scope .hero h1 span{background:linear-gradient(90deg,#3ee6b0,#9a8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-        .acc-scope .snap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .acc-scope .snap{padding:14px 14px 12px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);min-width:0;transition:transform .3s var(--ease),background .3s}
-        .acc-scope .snap small{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#9fb8ae;font-weight:600;letter-spacing:.04em}
-        .acc-scope .snap small i{color:#3ee6b0;font-size:11px}
-        .acc-scope .snap b{display:block;margin-top:6px;font:600 clamp(15px,3.6vw,22px) var(--f-mono);letter-spacing:-.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-        .acc-scope .snap.main{grid-column:1/-1;background:linear-gradient(135deg,rgba(62,230,176,.22),rgba(154,140,255,.18));border-color:rgba(62,230,176,.35)}
-        .acc-scope .snap.main b{font-size:clamp(26px,7vw,44px);color:#fff}
-        @media(min-width:900px){.acc-scope .hero{padding:40px 40px 30px}.acc-scope .snap-grid{grid-template-columns:1.4fr repeat(6,1fr)}.acc-scope .snap.main{grid-column:auto}}
-        .acc-scope .widgets-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-        @media(min-width:900px){.acc-scope .widgets-grid{grid-template-columns:1fr 1fr 2fr;gap:14px}.acc-scope .calendar-weather-row{grid-column:span 1!important;display:contents!important}}
-        .acc-scope .widget-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);overflow:hidden;position:relative;animation:rise .6s var(--ease) both;transition:transform .3s var(--ease),border-color .3s}
-        .acc-scope .widget-header{display:flex;align-items:center;gap:7px;font:600 10.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
-        .acc-scope .widget-header i{color:var(--accent);font-size:12px}
-        .acc-scope .widget-content{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .acc-scope #liveTime{font:600 clamp(18px,4.6vw,24px) var(--f-mono);letter-spacing:-.04em}
-        .acc-scope .calendar-weather-row{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .acc-scope .daily-calendar{display:flex;align-items:center;gap:12px}
-        .acc-scope .cal-badge{flex:none;width:54px;border-radius:14px;overflow:hidden;text-align:center;border:1px solid var(--border-color);background:var(--card-2)}
-        .acc-scope .cal-badge-month{display:block;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#04120d;font:700 9.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:3px 0}
-        .acc-scope .cal-badge-day{display:block;font:800 24px var(--f-body);line-height:1.25;letter-spacing:-.04em}
-        .acc-scope .cal-info{min-width:0}
-        .acc-scope .cal-weekday{font-weight:800;font-size:15px;letter-spacing:-.02em}
-        .acc-scope .cal-full-date{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .acc-scope .weather-widget{display:flex;align-items:center;gap:12px}
-        .acc-scope .weather-icon-box{flex:none;width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:22px;background:rgba(245,158,11,.12)}
-        .acc-scope .weather-temp{font:600 24px var(--f-mono);letter-spacing:-.05em;line-height:1.1}
-        .acc-scope .weather-condition{font-size:11.5px;color:var(--text-muted);font-weight:500}
-        .acc-scope .sections{display:block}
-        @media(min-width:900px){.acc-scope .sections{column-count:2;column-gap:18px}}
-        .acc-scope .section-card{break-inside:avoid;background:var(--card-bg);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
-        @media(min-width:900px){.acc-scope .section-card{margin-bottom:18px;padding:20px}}
-        .acc-scope .table-header-wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
-        .acc-scope h2{display:flex;align-items:center;gap:11px;font-size:16px;font-weight:800;letter-spacing:-.02em}
-        .acc-scope h2 i{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:14px;color:#04120d;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-        .acc-scope .table-responsive{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid var(--border-color);background:var(--card-bg)}
-        .acc-scope table{width:100%;border-collapse:collapse;table-layout:fixed}
-        .acc-scope th,.acc-scope td{padding:11px 10px;font-size:12.5px;overflow-wrap:anywhere}
-        .acc-scope th{background:var(--table-header);color:var(--text-muted);font:600 10px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--border-color)}
-        .acc-scope td{border-bottom:1px solid var(--border-color);transition:background .2s}
-        .acc-scope tr:last-child td{border-bottom:none}
-        .acc-scope th:nth-child(1),.acc-scope td:nth-child(1){width:62%;text-align:left}
-        .acc-scope th:nth-child(2),.acc-scope td:nth-child(2){width:38%;text-align:right}
-        .acc-scope .dynamic-table th:nth-child(1),.acc-scope .dynamic-table td:nth-child(1){width:46%;text-align:left}
-        .acc-scope .dynamic-table th:nth-child(2),.acc-scope .dynamic-table td:nth-child(2){width:16%;text-align:center}
-        .acc-scope .dynamic-table th:nth-child(3),.acc-scope .dynamic-table td:nth-child(3){width:38%;text-align:right}
-        .acc-scope td:last-child{font-family:var(--f-mono);font-weight:600;letter-spacing:-.02em}
-        .acc-scope td[contenteditable="true"],.acc-scope .editable-label,.acc-scope .uae-val,.acc-scope .exp-val,.acc-scope .cc-val,.acc-scope .split-val{cursor:text;outline:none;transition:background .2s,box-shadow .2s}
-        .acc-scope td[contenteditable="true"]{color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--accent) 35%,transparent)}
-        .acc-scope .editable-label,.acc-scope .uae-val,.acc-scope .exp-val,.acc-scope .cc-val,.acc-scope .split-val{display:inline-block;padding:3px 8px;border-radius:8px;min-width:50%}
-        .acc-scope .editable-label{width:100%;font-family:var(--f-body)}
-        .acc-scope .uae-val,.acc-scope .exp-val,.acc-scope .cc-val,.acc-scope .split-val{color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);font-family:var(--f-mono);font-weight:600;min-width:80px;text-align:right}
-        .acc-scope .calculated-row{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent),color-mix(in srgb,var(--accent-2) 8%,transparent))!important;font-weight:700}
-        .acc-scope .calculated-row td:first-child{box-shadow:inset 4px 0 0 var(--accent)}
-        .acc-scope .calculated-row td:last-child{color:var(--accent);font-size:13.5px}
-        .acc-scope .locked-row{background:var(--card-2)!important;color:var(--text-muted);font-weight:600}
-        .acc-scope .section-header-row{background:var(--card-2)!important;text-align:center!important;font:700 10.5px var(--f-mono)!important;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2)!important}
-        .acc-scope .section-header-row td{text-align:center!important;width:auto!important;font-family:var(--f-mono)!important;color:inherit!important}
-        .acc-scope .add-row-btn{display:inline-flex;align-items:center;gap:7px;cursor:pointer;white-space:nowrap;padding:8px 14px;border-radius:99px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:11.5px;font-weight:700;transition:all .25s var(--ease)}
-        .acc-scope .add-row-btn:hover{background:var(--accent);color:#04120d;transform:translateY(-2px)}
-        .acc-scope .delete-row-btn{width:28px;height:28px;border-radius:99px;cursor:pointer;border:1px solid var(--border-color);background:transparent;color:var(--text-muted);font-size:11px;transition:all .2s}
-        .acc-scope .delete-row-btn:hover{background:#ff4d4f;border-color:#ff4d4f;color:#fff;transform:rotate(-8deg)}
-        .acc-scope .action-bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:1100;width:min(94vw,520px);display:flex;gap:8px;align-items:center;padding:8px;border-radius:99px;background:color-mix(in srgb,var(--card-bg) 80%,transparent);backdrop-filter:blur(18px) saturate(170%);border:1px solid var(--border-color);box-shadow:0 20px 50px -15px rgba(0,0,0,.4)}
-        .acc-scope .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;border:none;border-radius:99px;cursor:pointer;font-size:13px;font-weight:700;color:#04120d;background:linear-gradient(135deg,var(--accent),#b6f27a);box-shadow:0 8px 20px -8px var(--accent);transition:transform .2s var(--ease)}
-        .acc-scope .btn:hover{transform:translateY(-2px)}
-        .acc-scope .btn-secondary{background:var(--card-2);color:var(--text-main);border:1px solid var(--border-color);box-shadow:none}
-        .acc-scope #success-msg{display:none;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);white-space:nowrap;padding:9px 16px;border-radius:99px;background:var(--accent);color:#04120d;font-size:12px;font-weight:700;box-shadow:0 10px 30px -10px var(--accent)}
-        .acc-scope .footer{margin:26px 0 10px;padding:22px 18px;text-align:center;border-top:1px dashed var(--border-color)}
-        .acc-scope .footer-disclaimer{font-size:11.5px;color:var(--text-muted);line-height:1.8;max-width:620px;margin:0 auto 10px}
-        .acc-scope .footer-copyright{font:500 11px var(--f-mono);letter-spacing:.06em;color:var(--text-main)}
-        .acc-scope .ri{display:inline-grid;place-items:center;width:24px;height:24px;margin-right:9px;border-radius:8px;vertical-align:middle;flex:none;font-size:10.5px;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);transition:transform .3s var(--ease),background .3s,color .3s}
-        .acc-scope tr:hover .ri{transform:scale(1.12) rotate(-6deg);background:var(--accent);color:#04120d}
-
-        /* ==========================================================================
-           2. STYLES FOR FAMILY EXPENSES
-           ========================================================================== */
-        .fam-scope {
-            --bg:#eef3f1;--surface:#fff;--soft:#f3f7f5;--ink:#10201e;--muted:#62756f;--line:#dbe5e1;--brand:#0e7c66;--brand-2:#14a38a;--deep:#0b2f2b;--gold:#e3b04b;--danger:#e5484d;--f-body:'Hind Siliguri',sans-serif;--f-display:'Tiro Bangla','Hind Siliguri',serif;--ease:cubic-bezier(.2,.8,.2,1);
-            background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh;padding:14px;transition:background .3s,color .3s;
-        }
-        .fam-scope[data-theme=dark]{--bg:#081412;--surface:#0f1f1c;--soft:#142925;--ink:#e6f2ee;--muted:#8aa69d;--line:#1e3430;--brand:#2fc4a5;--brand-2:#1fa88c;--deep:#06100e;--danger:#ff7a7e}
-        .fam-scope .wrap{max-width:1180px;margin:0 auto;padding-bottom:40px}
-        .fam-scope .bismillah{text-align:center;padding:6px 0 14px}
-        .fam-scope .bismillah .ar{font-family:'Lateef',serif;font-size:clamp(28px,5vw,40px);color:var(--brand);line-height:1.3}
-        .fam-scope .bismillah .bn{font-size:12.5px;color:var(--muted)}
-        .fam-scope .bar-nav{position:sticky;top:50px;z-index:50;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;width:fit-content;max-width:100%;margin:0 auto 16px;padding:6px;border-radius:99px;background:color-mix(in srgb,var(--surface) 85%,transparent);backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 10px 30px -14px rgba(11,47,43,.35)}
-        .fam-scope .nav-btn{height:40px;padding:0 16px;border:0;border-radius:99px;background:transparent;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;cursor:pointer;transition:background .2s}
-        .fam-scope .nav-btn:hover{background:var(--soft)}
-        .fam-scope .nav-btn i{color:var(--brand)}
-        .fam-scope .hero{position:relative;overflow:hidden;border-radius:32px;padding:30px 24px 22px;background:var(--deep);color:#e8f6f1;margin-bottom:16px;display:grid;gap:26px}
-        .fam-scope .hero::before{content:"";position:absolute;inset:auto -80px -140px auto;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(20,163,138,.5),transparent 68%)}
-        .fam-scope .hero>*{position:relative}
-        .fam-scope .hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(24px,4vw,34px);line-height:1.25}
-        .fam-scope .hero .lbl{font-size:13.5px;color:#9fc9bd;margin-top:14px;display:flex;align-items:center;gap:8px}
-        .fam-scope .hero .big{font-family:var(--f-display);font-size:clamp(40px,9vw,72px);line-height:1.1;margin-top:2px;color:#fff;word-break:break-all}
-        .fam-scope .hero .sub{margin-top:14px;display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:14px;background:rgba(255,255,255,.07);font-size:13.5px;color:#cfe8e0}
-        .fam-scope .hero .sub b{font-family:var(--f-display);font-weight:400;font-size:17px;color:var(--gold)}
-        .fam-scope .bars{display:flex;align-items:flex-end;gap:5px;height:130px}
-        .fam-scope .bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;background:none;border:0;cursor:pointer;min-width:0}
-        .fam-scope .bar span{display:block;width:100%;border-radius:8px 8px 3px 3px;background:rgba(255,255,255,.18);transition:height .5s var(--ease),background .2s}
-        .fam-scope .bar:hover span{background:rgba(255,255,255,.4)}
-        .fam-scope .bar.on span{background:var(--gold)}
-        .fam-scope .bar em{font-style:normal;font-size:9.5px;color:#8fb8ab;white-space:nowrap;overflow:hidden;max-width:100%}
-        .fam-scope .bar.on em{color:var(--gold)}
-        @media(min-width:860px){.fam-scope .hero{grid-template-columns:1fr 1.2fr;align-items:end;padding:40px 44px 32px}.fam-scope .bars{height:170px}.fam-scope .bar em{font-size:11px}}
-        .fam-scope .filters{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 16px;margin-bottom:16px;display:grid;gap:10px}
-        .fam-scope .tab-row{display:flex;align-items:center;gap:12px;overflow-x:auto;scrollbar-width:none}
-        .fam-scope .tab-row::-webkit-scrollbar{display:none}
-        .fam-scope .tab-label{font-weight:700;color:var(--muted);font-size:13.5px;min-width:40px}
-        .fam-scope .tab-group{display:flex;gap:6px}
-        .fam-scope .tab-btn{border:0;background:var(--soft);color:var(--muted);padding:7px 16px;border-radius:99px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
-        .fam-scope .tab-btn:hover{color:var(--brand)}
-        .fam-scope .tab-btn.active{background:var(--brand);color:#fff}
-        .fam-scope .sections{display:grid;gap:16px}
-        @media(min-width:960px){.fam-scope .sections{grid-template-columns:360px 1fr;align-items:start}.fam-scope .add-card{position:sticky;top:110px}}
-        .fam-scope .card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:22px}
-        .fam-scope h2{font-family:var(--f-display);font-weight:400;font-size:20px;margin-bottom:18px}
-        .fam-scope .add-card{background:linear-gradient(170deg,var(--surface),var(--soft))}
-        .fam-scope .field{margin-bottom:14px}
-        .fam-scope .field label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
-        .fam-scope .field input{width:100%;padding:13px 16px;border-radius:16px;border:1.5px solid var(--line);background:var(--surface);font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
-        .fam-scope .field input:focus{border-color:var(--brand);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 18%,transparent)}
-        .fam-scope .btn-primary{width:100%;border:0;border-radius:99px;padding:15px;margin-top:6px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;background:linear-gradient(135deg,var(--brand),var(--brand-2));box-shadow:0 12px 24px -12px var(--brand);transition:transform .2s var(--ease)}
-        .fam-scope .btn-primary:hover{transform:translateY(-2px)}
-        .fam-scope .btn-primary:active{transform:scale(.98)}
-        .fam-scope .table-responsive{max-height:560px;overflow:auto;border-radius:18px;scrollbar-width:thin}
-        .fam-scope table{width:100%;border-collapse:collapse}
-        .fam-scope th{position:sticky;top:0;background:var(--soft);color:var(--muted);font-size:12.5px;font-weight:600;text-align:left;padding:12px 16px}
-        .fam-scope td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:14.5px;overflow-wrap:anywhere}
-        .fam-scope tr:last-child td{border-bottom:0}
-        .fam-scope tbody tr:hover td{background:var(--soft)}
-        .fam-scope td:first-child{color:var(--muted);font-size:13px;white-space:nowrap}
-        .fam-scope .badge{padding:3px 11px;border-radius:99px;font-size:12px;font-weight:700;background:color-mix(in srgb,var(--danger) 13%,transparent);color:var(--danger)}
-        .fam-scope .amt{text-align:right;font-family:var(--f-display);font-size:16px;white-space:nowrap}
-        .fam-scope .empty-state{text-align:center;padding:48px 16px;color:var(--muted)}
-        .fam-scope .empty-state i{font-size:30px;margin-bottom:10px;color:var(--brand)}
-        .fam-scope .footer{margin-top:22px;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.8}
-        .fam-scope .footer span{color:var(--brand);font-weight:700}
-
-        /* ==========================================================================
-           3. STYLES FOR MOSQUE
-           ========================================================================== */
-        .mosq-scope {
-            --em:#0d5c4b;--em-d:#073b30;--gold:#c39a3b;--gold-l:#f1dc9b;--bg:#eef3f0;--ink:#14221e;--mut:#667a73;--line:#dfe8e4;--red:#c0453d;--body:'Plus Jakarta Sans','Tiro Bangla',sans-serif;--disp:'Cinzel','Tiro Bangla',serif;
-            font:15px/1.6 var(--body);color:var(--ink);background:var(--bg);min-height:100vh;padding:10px 0;
-        }
-        .mosq-scope .wrap{max-width:980px;margin:0 auto;padding:12px 12px 40px}
-        .mosq-scope .hero{position:relative;text-align:center;color:#fff;padding:54px 20px 46px;border-radius:280px 280px 30px 30px/140px 140px 30px 30px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 4l6 18 18 6-18 6-6 18-6-18-18-6 18-6z' fill='none' stroke='%23f1dc9b' stroke-opacity='.15'/%3E%3C/svg%3E"),radial-gradient(ellipse at 50% 0,#14806a,transparent 70%),linear-gradient(170deg,var(--em),var(--em-d));border:2px solid var(--gold)}
-        .mosq-scope .bism-wrapper{display:inline-block;padding:8px 24px;border-radius:50px;background:rgba(7,59,48,0.4);border:1px solid rgba(241,220,155,0.3);box-shadow:inset 0 0 15px rgba(195,154,59,0.2);margin-bottom:6px}
-        .mosq-scope .bism{display:inline-block;max-width:100%;font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:26px;line-height:1.6;letter-spacing:1px;background:linear-gradient(120deg,#fceabb,#f8b500,#f1dc9b,#c39a3b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-        .mosq-scope .bn-m{font-size:13px;color:#bfe0d6;margin-top:4px;font-family:'Tiro Bangla',serif}
-        .mosq-scope h1{font-family:var(--disp);font-size:clamp(24px,5.5vw,40px);line-height:1.25;margin-top:12px;letter-spacing:0.5px}
-        .mosq-scope .sub{font-size:13px;font-weight:600;color:var(--gold-l);margin-top:4px}
-        .mosq-scope .addr{font-size:12px;color:#a6cfc3;margin-top:8px}
-        .mosq-scope .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px;margin-top:-28px;position:relative}
-        .mosq-scope .stat{background:#fff;border:1px solid var(--line);border-bottom:3px solid var(--gold);border-radius:16px;padding:12px 6px;text-align:center;min-width:0;box-shadow:0 14px 28px -18px rgba(7,59,48,.6)}
-        .mosq-scope .stat small{display:block;font-size:11.5px;color:var(--mut)}
-        .mosq-scope .stat b{display:block;font-size:clamp(16px,4.5vw,24px);font-weight:800;color:var(--em);line-height:1.3;overflow-wrap:anywhere}
-        .mosq-scope .acts{display:flex;gap:8px;margin:18px 0 12px}
-        .mosq-scope .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border:0;border-radius:14px;background:var(--em);color:#fff;font-weight:700;cursor:pointer;transition:background .2s}
-        .mosq-scope .btn:hover{background:var(--em-d)}.mosq-scope .btn svg{width:18px;height:18px}
-        .mosq-scope .ib{display:flex;align-items:center;gap:7px;min-width:46px;min-height:46px;justify-content:center;padding:0 12px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--em);font-weight:600;font-size:13.5px;cursor:pointer}
-        .mosq-scope .ib:hover{border-color:var(--em)}.mosq-scope .ib svg{width:18px;height:18px}.mosq-scope .ib span{display:none}
-        @media(min-width:700px){.mosq-scope .ib span{display:inline}.mosq-scope .btn{flex:none}.mosq-scope .acts{justify-content:flex-start}.mosq-scope .acts .btn{margin-right:auto}}
-        .mosq-scope .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none}
-        .mosq-scope .chips::-webkit-scrollbar{display:none}
-        .mosq-scope .chip{flex:none;padding:7px 16px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:13.5px;color:var(--mut);cursor:pointer}
-        .mosq-scope .chip.on{background:var(--em);border-color:var(--em);color:#fff}
-        .mosq-scope .ysum{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 6px 10px;color:var(--mut);font-size:13.5px}
-        .mosq-scope .ysum b{font-family:var(--disp);font-size:18px;color:var(--ink)}
-        .mosq-scope .list{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden}
-        .mosq-scope .head,.mosq-scope .row{display:grid;grid-template-columns:1.3fr 1fr .8fr 20px;align-items:center;gap:8px;padding:0 20px}
-        .mosq-scope .head{padding-top:12px;padding-bottom:12px;background:#f5f9f7;font-size:12.5px;font-weight:600;color:var(--mut)}
-        .mosq-scope .head span:nth-child(3){text-align:right}
-        .mosq-scope .row{width:100%;text-align:left;padding-top:14px;padding-bottom:14px;border:0;border-top:1px solid var(--line);background:#fff;cursor:pointer;transition:background .15s}
-        .mosq-scope .row:hover{background:#f2f9f6}
-        .mosq-scope .row .m{font-weight:600}.mosq-scope .row .d{color:var(--mut);font-size:13.5px}
-        .mosq-scope .row .a{text-align:right;font-weight:700;color:var(--em);font-variant-numeric:tabular-nums}
-        .mosq-scope .row .c{color:var(--gold);font-size:18px;line-height:1}
-        .mosq-scope .empty{padding:40px 16px;text-align:center;color:var(--mut)}
-        .mosq-scope .total{position:sticky;bottom:max(10px,env(safe-area-inset-bottom));margin-top:14px;display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-radius:18px;background:var(--em-d);color:var(--gold-l);border:1.5px solid var(--gold);box-shadow:0 14px 30px -10px rgba(7,59,48,.7);z-index:5}
-        .mosq-scope .total b{font-size:clamp(18px,5vw,24px);font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
-        .mosq-scope .foot{text-align:center;color:var(--mut);font-size:12.5px;padding:18px 0 4px}
-        .mosq-scope .foot b{font-family:'Reem Kufi',sans-serif;font-size:18px;color:var(--em);font-weight:700}
-        .mosq-scope dialog{border:0;border-radius:24px;padding:0;width:min(440px,calc(100% - 24px));margin:auto;background:#fff;color:var(--ink);box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
-        .mosq-scope dialog::backdrop{background:rgba(7,59,48,.55);backdrop-filter:blur(3px)}
-        .mosq-scope dialog[open]{animation:up .25s ease-out}
-        @keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
-        .mosq-scope .dh{padding:20px 22px 6px;font-family:var(--disp);font-size:20px;font-weight:700}
-        .mosq-scope .db{padding:10px 22px;display:grid;gap:12px}
-        .mosq-scope .db label{display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin-bottom:5px}
-        .mosq-scope .two{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
-        .mosq-scope .db input,.mosq-scope .db select{width:100%;min-height:48px;padding:0 14px;border:1.5px solid var(--line);border-radius:12px;background:#f7faf8;font-size:16px;outline:none}
-        .mosq-scope .db input:focus,.mosq-scope .db select:focus{border-color:var(--em);background:#fff}
-        .mosq-scope .df{display:flex;gap:8px;padding:12px 22px 22px;align-items:center}
-        .mosq-scope .df .btn{flex:1;min-height:48px}
-        .mosq-scope .df .gh{flex:none;border:0;background:none;padding:0 12px;min-height:48px;font-weight:600;color:var(--mut);cursor:pointer}
-        .mosq-scope .df .dl{color:var(--red);margin-right:auto}
-        @media(max-width:640px){
-            .mosq-scope dialog{margin:auto auto 0;width:100%;max-width:none;border-radius:24px 24px 0 0;padding-bottom:env(safe-area-inset-bottom)}
-            .mosq-scope .hero{padding:46px 14px 38px}
-            .mosq-scope .head{display:none}
-            .mosq-scope .row{grid-template-columns:1fr auto 18px;grid-template-areas:"m a c" "d a c";gap:0 10px;padding:12px 16px}
-            .mosq-scope .row .m{grid-area:m}.mosq-scope .row .d{grid-area:d}.mosq-scope .row .a{grid-area:a;font-size:16px}.mosq-scope .row .c{grid-area:c}
-        }
-        .mosq-scope #toast{position:fixed;left:50%;top:60px;transform:translate(-50%,-80px);background:var(--em-d);color:#fff;padding:10px 18px;border-radius:99px;font-size:13.5px;transition:transform .3s;z-index:99;max-width:90vw}
-        .mosq-scope #toast.show{transform:translate(-50%,0)}
+        body { font-family: 'Hind Siliguri', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
 
-    <!-- TOP MASTER NAVIGATION -->
-    <header class="master-nav-bar">
-        <div class="master-brand">
-            <i class="fa-solid fa-vault text-emerald-400"></i>
-            <span>আবদুল আউয়াল এর সমন্বয় ড্যাশবোর্ড</span>
-        </div>
-        <div class="master-tabs">
-            <button class="master-tab-btn active" onclick="switchApp('accounts', this)">
-                <i class="fa-solid fa-chart-line"></i> Accounts (ব্যক্তিগত)
-            </button>
-            <button class="master-tab-btn" onclick="switchApp('familyexpenses', this)">
-                <i class="fa-solid fa-house-chimney"></i> Family Expenses (পারিবারিক)
-            </button>
-            <button class="master-tab-btn" onclick="switchApp('dailytally', this)">
-                <i class="fa-solid fa-receipt"></i> Daily Tally (দৈনিক ট্যালি)
-            </button>
-            <button class="master-tab-btn" onclick="switchApp('mosque', this)">
-                <i class="fa-solid fa-mosque"></i> Mosque Fund (মসজিদ)
-            </button>
-        </div>
-    </header>
-
-    <!-- ==========================================================================
-         APP 1: ACCOUNTS (FINANCIAL DASHBOARD)
-         ========================================================================== -->
-    <div id="app-accounts" class="app-container active-app">
-        <div class="acc-scope" id="accScopeRoot" data-theme="light">
-            <div class="aurora" aria-hidden="true"><i></i><i></i></div>
-            <div class="container">
-                <div class="bismillah-banner">
-                    <div class="bismillah-arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-                    <div class="bismillah-meaning">(পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি)</div>
+    <!-- Header Navigation -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm print:hidden">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                 </div>
-                <div class="print-header"><h1>আবদুল আউয়াল এর ব্যক্তিগত হিসেব</h1><div class="print-timestamp" id="printTimestamp"></div></div>
-                <nav class="navbar">
-                    <div class="nav-brand"><span class="logo"><i class="fas fa-wallet"></i></span>Abdul's Dashboard</div>
-                    <div class="nav-controls">
-                        <button class="nav-btn" onclick="exportToJSON()" title="Backup"><i class="fas fa-cloud-arrow-down"></i></button>
-                        <button class="nav-btn" onclick="document.getElementById('jsonFileInput').click()" title="Restore"><i class="fas fa-cloud-arrow-up"></i></button>
-                        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
-                        <button class="nav-btn" onclick="toggleThemeAccounts()" id="themeBtn">🌙</button>
-                        <button class="nav-btn" onclick="handlePrintAccounts()" title="Print"><i class="fas fa-print"></i></button>
-                    </div>
-                </nav>
-                <header class="hero">
-                    <span class="kicker"><span class="dot"></span>Personal ledger</span>
-                    <h1>Abdul's <span>Financial</span> Dashboard</h1>
-                    <div class="snap-grid">
-                        <div class="snap main"><small><i class="fas fa-wallet"></i>Usable Amount</small><b id="snapUsable">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-lock"></i>Hold Amount</small><b id="snapHold">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-building-columns"></i>UAE in BDT</small><b id="snapUae">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-credit-card"></i>Card Outstanding</small><b id="snapCc">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-moon"></i>Zakat Payable</small><b id="snapZakat">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-chart-pie"></i>Investment</small><b id="snapInvestment">0.00</b></div>
-                        <div class="snap"><small><i class="fas fa-receipt"></i>Monthly Expenses</small><b id="snapExpenses">0.00</b></div>
-                    </div>
-                </header>
-                <div class="widgets-grid">
-                    <div class="widget-card"><div class="widget-header"><i class="fas fa-clock"></i> Live Time</div><div class="widget-content" id="liveTime">--:--:--</div></div>
-                    <div class="widget-card"><div class="widget-header"><i class="fas fa-location-dot"></i> Location</div><div class="widget-content" id="locationText">Detecting...</div></div>
-                    <div class="calendar-weather-row">
-                        <div class="widget-card"><div class="widget-header"><i class="fas fa-calendar-days"></i> Calendar</div><div class="daily-calendar"><div class="cal-badge"><span class="cal-badge-month" id="calMonthName">---</span><span class="cal-badge-day" id="calDayNum">--</span></div><div class="cal-info"><div class="cal-weekday" id="calWeekdayName">---</div><div class="cal-full-date" id="calFullDateText">---</div></div></div></div>
-                        <div class="widget-card"><div class="widget-header"><i class="fas fa-cloud-sun"></i> Weather</div><div class="weather-widget"><div class="weather-icon-box" id="weatherIconBox"><i class="fas fa-sun" id="weatherIcon"></i></div><div class="weather-info"><div class="weather-temp" id="weatherTemp">--°C</div><div class="weather-condition" id="weatherCondition">Loading...</div></div></div></div>
-                    </div>
-                </div>
-                <div class="sections">
-                    <div class="section-card">
-                        <div class="table-header-wrap"><h2><i class="fas fa-right-left"></i>Currency Converter</h2></div>
-                        <div class="table-responsive">
-                            <table id="tableCurrency">
-                                <tr><th>Description</th><th style="text-align: right;">Value</th></tr>
-                                <tr><td>Rate</td><td contenteditable="true" id="rateInput" style="text-align: right;" oninput="calculateAll()">33.43</td></tr>
-                                <tr class="locked-row"><td>Rate x 2.5% Incentive Result</td><td id="incentiveResult" style="text-align: right;">0.00</td></tr>
-                                <tr><td>AED Amount</td><td contenteditable="true" id="aedAmountInput" style="text-align: right;" oninput="calculateAll()">1000.00</td></tr>
-                                <tr class="calculated-row"><td>Final Converted Result</td><td id="finalResult" style="text-align: right;">0.00</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="table-header-wrap"><h2><i class="fas fa-chart-pie"></i>Invesment</h2></div>
-                        <div class="table-responsive">
-                            <table id="tableInvestment">
-                                <tr><th>Description</th><th style="text-align: right;">Value</th></tr>
-                                <tr><td>Down Payment</td><td contenteditable="true" id="investmentDownPaymentInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>Monthly Installment</td><td contenteditable="true" id="investmentInstallmentInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Total</td><td id="investmentTotalResult" style="text-align: right;">0.00</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card" id="uaeSectionCard">
-                        <div class="table-header-wrap"><h2><i class="fas fa-building-columns"></i>UAE Accounts</h2><button class="add-row-btn" onclick="addUaeRow()"><i class="fas fa-plus"></i> Add Account</button></div>
-                        <div class="table-responsive">
-                            <table id="tableUAE" class="dynamic-table">
-                                <thead><tr><th>Description</th><th style="text-align: center;">Action</th><th style="text-align: right;">Value</th></tr></thead>
-                                <tbody id="uaeTbody"></tbody>
-                                <tfoot>
-                                    <tr class="locked-row"><td colspan="2">Current Month Salary</td><td id="salaryResult" style="text-align: right;">0.00</td></tr>
-                                    <tr><td colspan="2">Absent Days</td><td contenteditable="true" id="absentDaysInput" style="text-align: right;" oninput="calculateAll()">0</td></tr>
-                                    <tr><td colspan="2">Over Time</td><td contenteditable="true" id="otDaysInput" style="text-align: right;" oninput="calculateAll()">0</td></tr>
-                                    <tr class="locked-row"><td colspan="2">Over Time Total Amount</td><td id="otResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Salary & OT Total</td><td id="salaryOtTotalResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Total AED</td><td id="uaeTotalAED" style="text-align: right;">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Total Converted in BDT</td><td id="uaeTotalBDT" style="text-align: right;">0.00</td></tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="table-header-wrap"><h2><i class="fas fa-landmark"></i>BD Accounts</h2></div>
-                        <div class="table-responsive">
-                            <table id="tableBD">
-                                <tr><th>Description</th><th style="text-align: right;">Value</th></tr>
-                                <tr><td>MTB Savings</td><td contenteditable="true" id="mtbSavingsInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>MTB NRB</td><td contenteditable="true" id="mtbNrbInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>BRAC Provashi</td><td contenteditable="true" id="bracProvashiInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>DBBL Agent</td><td contenteditable="true" id="dbblAgentInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>UCBL Islamic</td><td contenteditable="true" id="ucblIslamicInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Usable Amount</td><td id="usableAmountResult" style="text-align: right;">0.00</td></tr>
-                                <tr><td>DBBL Core</td><td contenteditable="true" id="dbblCoreInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>Pubali Islamic</td><td contenteditable="true" id="pubaliIslamicInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>IBBL Savings</td><td contenteditable="true" id="ibblSavingsInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="locked-row"><td>Hold Amount</td><td id="holdAmountResult" style="text-align: right;">0.00</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="table-header-wrap">
-                            <h2><i class="fas fa-credit-card"></i>Credit Card Accounts</h2>
-                            <button class="add-row-btn" onclick="addCcRow()"><i class="fas fa-plus"></i> Add Row</button>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="tableCreditCard" class="dynamic-table">
-                                <thead><tr><th>Monthly Outstanding Payment</th><th style="text-align: center;">Action</th><th style="text-align: right;">Value</th></tr></thead>
-                                <tbody id="ccTbody"></tbody>
-                                <tfoot>
-                                    <tr class="calculated-row"><td colspan="2">Total Credit Card Outstanding</td><td id="ccTotalResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="section-header-row"><td colspan="3">Tabby Credit Card Status</td></tr>
-                                    <tr><td colspan="2">Credit Limit</td><td contenteditable="true" id="tabbyLimitInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Credit Balance</td><td id="tabbyBalanceResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Credit Used</td><td id="tabbyUsedResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="locked-row"><td colspan="2">Outstanding</td><td id="tabbyOutstandingResult" style="text-align: right;">0.00</td></tr>
-                                    <tr><td colspan="2">Split Charge</td><td contenteditable="true" id="tabbySplitInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                    <tr class="section-header-row"><td colspan="3">Monthly Split Purchase Status</td></tr>
-                                </tfoot>
-                            </table>
-                            <table id="tableSplit" class="dynamic-table" style="margin-top: 10px;">
-                                <tbody id="splitTbody"></tbody>
-                                <tfoot>
-                                    <tr class="calculated-row"><td style="width: 46%;">Total Split Amount</td><td style="width: 16%; text-align: center;"></td><td style="width: 38%; text-align: right;" id="splitTotalResult">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">Upcoming Payment</td><td id="upcomingPaymentResult" style="text-align: right;">0.00</td></tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="table-header-wrap"><h2><i class="fas fa-receipt"></i>Monthly Expenses Planing</h2><button class="add-row-btn" onclick="addExpenseRow()"><i class="fas fa-plus"></i> Add Expense</button></div>
-                        <div class="table-responsive">
-                            <table id="tableExpenses" class="dynamic-table">
-                                <thead><tr><th>Description</th><th style="text-align: center;">Action</th><th style="text-align: right;">Value</th></tr></thead>
-                                <tbody id="expensesTbody"></tbody>
-                                <tfoot>
-                                    <tr class="calculated-row"><td colspan="2">Total</td><td id="expTotalResult" style="text-align: right;">0.00</td></tr>
-                                    <tr class="calculated-row"><td colspan="2">In AED</td><td id="expInAedResult" style="text-align: right;">0.00</td></tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="table-header-wrap"><h2><i class="fas fa-moon"></i>Zakat Calculator</h2></div>
-                        <div class="table-responsive">
-                            <table id="tableZakat">
-                                <tr><th>Description</th><th style="text-align: right;">Value</th></tr>
-                                <tr><td>Total Cash & Bank Balances</td><td contenteditable="true" id="zakatCashInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="section-header-row"><td colspan="2">Gold Value Calculation</td></tr>
-                                <tr><td>Gold Gram (Weight)</td><td contenteditable="true" id="zakatGoldGramInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>Current Market Price (Per Gram)</td><td contenteditable="true" id="zakatGoldPriceInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Gold Value</td><td id="zakatGoldValueResult" style="text-align: right;">0.00</td></tr>
-                                <tr class="section-header-row"><td colspan="2">Other Assets & Liabilities</td></tr>
-                                <tr><td>Business Assets & Investments</td><td contenteditable="true" id="zakatBusinessInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr><td>Lent Money / Receivables</td><td contenteditable="true" id="zakatReceivablesInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Total Assets</td><td id="zakatTotalAssets" style="text-align: right;">0.00</td></tr>
-                                <tr><td>Deductions (Debts)</td><td contenteditable="true" id="zakatLiabilitiesInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Net Zakatable Wealth</td><td id="zakatNetWealth" style="text-align: right;">0.00</td></tr>
-                                <tr class="locked-row"><td>Nisab Silver Standard Weight</td><td id="zakatSilverWeight" style="text-align: right;">612.36 grams</td></tr>
-                                <tr><td>Current Silver Price (Per Gram)</td><td contenteditable="true" id="zakatSilverPriceInput" style="text-align: right;" oninput="calculateAll()">0.00</td></tr>
-                                <tr class="calculated-row"><td>Nisab Threshold</td><td id="zakatNisabThreshold" style="text-align: right;">0.00</td></tr>
-                                <tr class="locked-row"><td>Nisab Status</td><td id="zakatNisabStatus" style="text-align: right;">Not Eligible</td></tr>
-                                <tr class="calculated-row"><td>Total Zakat Payable (2.5%)</td><td id="zakatPayableResult" style="text-align: right;">0.00</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="action-bar">
-                    <button class="btn" onclick="saveData()"><i class="fas fa-floppy-disk"></i> Save changes</button>
-                    <span id="success-msg"><i class="fas fa-circle-check"></i> Saved successfully</span>
-                    <button class="btn btn-secondary" onclick="calculateAll()"><i class="fas fa-rotate"></i> Recalculate</button>
-                </div>
-                <footer class="footer">
-                    <div class="footer-disclaimer"><i class="ri fas fa-shield-halved" style="margin-right:8px"></i>ডিসক্লাইমার: ইহা আবদুল আউয়াল এর একান্ত নিজস্ব হিসেব নিকেশের খাতা।</div>
-                    <div class="footer-copyright">&copy; <span id="footerYear"></span> Abdul Awal. All Rights Reserved.</div>
-                </footer>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-         APP 2: FAMILY EXPENSES
-         ========================================================================== -->
-    <div id="app-familyexpenses" class="app-container">
-        <div class="fam-scope" id="famScopeRoot" data-theme="light">
-            <div class="wrap">
-              <div class="bismillah"><div class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><div class="bn">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি</div></div>
-              <nav class="bar-nav">
-                <button class="nav-btn" onclick="resetToHomeFamily()"><i class="fas fa-house"></i> হোম</button>
-                <button class="nav-btn" onclick="exportToCSVFamily()" title="ব্যাকআপ ডাউনলোড"><i class="fas fa-download"></i> ব্যাকআপ</button>
-                <button class="nav-btn" onclick="document.getElementById('csvFileInputFam').click()" title="রিস্টোর"><i class="fas fa-upload"></i> রিস্টোর</button>
-                <input type="file" id="csvFileInputFam" accept=".csv" style="display:none" onchange="importFromCSVFamily(event)">
-                <button class="nav-btn" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট</button>
-                <button class="nav-btn" onclick="toggleThemeFamily()" aria-label="থিম বদলান"><i id="themeIconFam" class="fas fa-moon"></i></button>
-              </nav>
-              <header class="hero">
                 <div>
-                  <h1>পারিবারিক পরিচালন ব্যয়</h1>
-                  <div class="lbl"><i class="fas fa-calendar-day"></i><span id="currentMonthLabel">নির্বাচিত মাসের খরচ</span></div>
-                  <div class="big" id="monthlyExpense">৳ ০</div>
-                  <div class="sub"><span id="currentYearLabel">নির্বাচিত বছরের খরচ</span><b id="yearlyExpense">৳ ০</b></div>
+                    <h1 class="text-xl font-bold leading-tight text-slate-900 dark:text-white">দৈনিক হিসাব খাতা</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">AED (আমিরাত) ও BDT (বাংলাদেশ) ক্লাউড হিসাব</p>
                 </div>
-                <div class="bars" id="bars" aria-label="মাসভিত্তিক খরচ"></div>
-              </header>
-              <div class="filters">
-                <div class="tab-row"><span class="tab-label">বছর</span><div class="tab-group" id="yearTabs"></div></div>
-                <div class="tab-row"><span class="tab-label">মাস</span><div class="tab-group" id="monthTabs">
-                  <button class="tab-btn active" onclick="selectMonthFamily('all', this)">সকল</button>
-                  <button class="tab-btn" onclick="selectMonthFamily('0', this)">জানুয়ারি</button><button class="tab-btn" onclick="selectMonthFamily('1', this)">ফেব্রুয়ারি</button><button class="tab-btn" onclick="selectMonthFamily('2', this)">মার্চ</button><button class="tab-btn" onclick="selectMonthFamily('3', this)">এপ্রিল</button><button class="tab-btn" onclick="selectMonthFamily('4', this)">মে</button><button class="tab-btn" onclick="selectMonthFamily('5', this)">জুন</button><button class="tab-btn" onclick="selectMonthFamily('6', this)">জুলাই</button><button class="tab-btn" onclick="selectMonthFamily('7', this)">আগস্ট</button><button class="tab-btn" onclick="selectMonthFamily('8', this)">সেপ্টেম্বর</button><button class="tab-btn" onclick="selectMonthFamily('9', this)">অক্টোবর</button><button class="tab-btn" onclick="selectMonthFamily('10', this)">নভেম্বর</button><button class="tab-btn" onclick="selectMonthFamily('11', this)">ডিসেম্বর</button>
-                </div></div>
-              </div>
-              <div class="sections">
-                <section class="card add-card">
-                  <h2>নতুন খরচ যোগ করুন</h2>
-                  <form id="expenseFormFamily">
-                    <div class="field"><label for="categoryFam">খরচের খাত / বিবরণ</label><input type="text" id="categoryFam" placeholder="যেমন: বাজার, বিদ্যুৎ বিল" required></div>
-                    <div class="field"><label for="amountFam">টাকার পরিমাণ (৳)</label><input type="number" id="amountFam" placeholder="পরিমাণ লিখুন" required></div>
-                    <div class="field"><label for="dateFam">তারিখ</label><input type="date" id="dateFam" required></div>
-                    <button type="submit" class="btn-primary"><i class="fas fa-check"></i> খরচ সেভ করুন</button>
-                  </form>
-                </section>
-                <section class="card">
-                  <h2>খরচের ইতিহাস</h2>
-                  <div class="table-responsive"><table>
-                    <thead><tr><th>তারিখ</th><th>বিবরণ</th><th>ধরণ</th><th style="text-align:right">পরিমাণ</th></tr></thead>
-                    <tbody id="expenseTableBody"><tr><td colspan="4"><div class="empty-state"><i class="fas fa-folder-open"></i><p>এখনো কোনো খরচ যোগ করা হয়নি। বাঁ পাশের ফর্ম থেকে শুরু করুন।</p></div></td></tr></tbody>
-                  </table></div>
-                </section>
-              </div>
-              <footer class="footer"><div>© 2026 <span>পারিবারিক পরিচালন ব্যয়</span></div><div>এই সিস্টেমটি শুধুমাত্র মাসিক ও বাৎসরিক পারিবারিক পরিচালন ব্যয়ের হিসাব সংরক্ষণের জন্য।</div></footer>
             </div>
-        </div>
-    </div>
 
-    <!-- ==========================================================================
-         APP 3: DAILY TALLY (HISEBER KHATA)
-         ========================================================================== -->
-    <div id="app-dailytally" class="app-container">
-        <div class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
-            <!-- Header Navigation -->
-            <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-12 z-30 shadow-sm print:hidden">
-                <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold leading-tight text-slate-900 dark:text-white">দৈনিক হিসাব খাতা</h1>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">AED (আমিরাত) ও BDT (বাংলাদেশ) ক্লাউড হিসাব</p>
-                        </div>
-                    </div>
+            <!-- Header Actions & Auth Status -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                    <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="moonIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.03 9.03 0 0012 21a9.03 9.03 0 008.354-5.646z"></path></svg>
+                </button>
 
-                    <div class="flex items-center gap-3">
-                        <button id="themeToggleBtnTally" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
-                            <svg id="sunIconTally" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <svg id="moonIconTally" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.03 9.03 0 0012 21a9.03 9.03 0 008.354-5.646z"></path></svg>
+                <!-- Auth Container -->
+                <div id="authContainer">
+                    <button id="googleSignInBtn" class="flex items-center gap-2 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 text-sm font-medium transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>জিমেইল দিয়ে সাইন-ইন</span>
+                    </button>
+
+                    <div id="userInfo" class="hidden flex items-center gap-2">
+                        <img id="userAvatar" src="" class="w-8 h-8 rounded-full border border-emerald-500" alt="Avatar">
+                        <div class="hidden sm:block text-left text-xs">
+                            <p id="userName" class="font-bold text-slate-800 dark:text-slate-100"></p>
+                            <p id="userEmail" class="text-slate-400 text-[10px]"></p>
+                        </div>
+                        <button id="signOutBtn" title="সাইন আউট" class="p-1.5 text-slate-400 hover:text-red-500 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </button>
                     </div>
                 </div>
-            </header>
-
-            <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
-                <!-- Incentive Notice Card -->
-                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="flex items-start gap-3">
-                        <span class="p-2 bg-emerald-600 text-white rounded-xl text-lg font-bold shadow-sm">২.৫%</span>
-                        <div>
-                            <h3 class="font-bold text-emerald-800 dark:text-emerald-300">সরকারি রেমিটেন্স প্রণোদনা (Incentive) হিসাব</h3>
-                            <p class="text-sm text-emerald-700 dark:text-emerald-400">আমিরাত (AED) থেকে বাংলাদেশে পাঠালে সরকারি ২.৫% বোনাস স্বয়ংক্রিয়ভাবে মোট রেটে যোগ হবে।</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-700 shadow-sm self-start md:self-auto">
-                        <label for="incentiveToggle" class="text-sm font-semibold cursor-pointer select-none">২.৫% প্রণোদনা হিসাবভুক্ত রাখুন</label>
-                        <input type="checkbox" id="incentiveToggle" checked class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
-                    </div>
-                </div>
-
-                <!-- Filters & Exchange Rate -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print:hidden">
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
-                        <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">ফিল্টার করুন</h3>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="text-xs text-slate-400">মাস</label>
-                                <input type="month" id="mon" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="text-xs text-slate-400">মুদ্রা</label>
-                                <select id="cf" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                    <option value="">সব মুদ্রা</option>
-                                    <option value="AED">AED</option>
-                                    <option value="BDT">BDT</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button id="all" class="mt-3 text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline text-left">সব সময়ের হিসাব দেখুন</button>
-                    </div>
-
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm md:col-span-2 flex flex-col justify-between">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400">বিনিময় হার (Exchange Rate)</h3>
-                            <span id="effectiveRateBadge" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-2.5 py-1 rounded-full">কার্যকর রেট: -- BDT</span>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="flex-1 min-w-[150px]">
-                                <label class="text-xs text-slate-400">১ AED = কত BDT (মূল ব্যাংকিং রেট)?</label>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <input type="number" id="rate" step="0.01" value="33.00" class="w-full text-base font-bold bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                    <span class="font-bold text-slate-500">BDT</span>
-                                </div>
-                            </div>
-                            <div class="text-xs text-slate-500 bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl flex-1 border border-slate-100 dark:border-slate-700">
-                                <p>মূল ব্যাংকিং রেট: <span id="baseRateTxt" class="font-bold">--</span> BDT</p>
-                                <p class="mt-0.5">সরকারি প্রণোদনা (+২.৫%): <span id="incAmtTxt" class="font-bold text-emerald-600 dark:text-emerald-400">--</span> BDT</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Total Balance Summary -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                        <h2 class="text-lg font-bold mb-3 flex items-center justify-between">
-                            <span>হিসাব সারসংক্ষেপ</span>
-                            <span class="text-xs font-normal text-slate-400" id="summaryPeriod">বর্তমান ফিল্টার</span>
-                        </h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                    <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-400">
-                                        <th class="pb-2">মুদ্রা</th>
-                                        <th class="pb-2 text-right">মোট আয়</th>
-                                        <th class="pb-2 text-right">মোট ব্যয়</th>
-                                        <th class="pb-2 text-right">অবশিষ্ট</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="sum" class="divide-y divide-slate-100 dark:divide-slate-700/50"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">একত্রিত নিট ক্যাশ (Combined Balance)</span>
-                            <h3 class="text-xs text-slate-400 mt-1" id="rateDisclaimer">১ AED = -- BDT</h3>
-                        </div>
-                        <div class="my-4 space-y-2">
-                            <div>
-                                <p class="text-xs text-slate-400">আনুমানিক মোট (AED-তে):</p>
-                                <p class="text-3xl font-extrabold text-emerald-400" id="combAED">0.00 AED</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-400">আনুমানিক মোট (BDT-তে):</p>
-                                <p class="text-xl font-bold text-slate-200" id="combBDT">0.00 BDT</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Section -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden">
-                    <h2 id="ft" class="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        নতুন হিসাব যোগ করুন
-                    </h2>
-                    <form id="f" class="space-y-4">
-                        <div class="flex rounded-xl bg-slate-100 dark:bg-slate-700 p-1">
-                            <button type="button" id="btnTypeOut" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white" onclick="setTypeTally('out')">ব্যয় (Expense)</button>
-                            <button type="button" id="btnTypeIn" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300" onclick="setTypeTally('in')">আয় (Income)</button>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                            <div>
-                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">পরিমাণ</label>
-                                <input type="number" id="amt" step="0.01" min="0.01" inputmode="decimal" required placeholder="0.00" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">মুদ্রা</label>
-                                <div class="flex rounded-lg border border-slate-200 dark:border-slate-600 overflow-hidden">
-                                    <button type="button" id="btnCurAED" class="flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white" onclick="setCurTally('AED')">AED</button>
-                                    <button type="button" id="btnCurBDT" class="flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300" onclick="setCurTally('BDT')">BDT</button>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">তারিখ</label>
-                                <input type="date" id="dt" required class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">ক্যাটেগরি</label>
-                                <select id="cat" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none"></select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">বিবরণ / নোট (ঐচ্ছিক)</label>
-                            <input type="text" id="note" maxlength="200" placeholder="যেমন: দেশে রেমিটেন্স পাঠালাম" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <div class="flex items-center gap-3 pt-2">
-                            <button id="sb" type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-md flex items-center gap-2">
-                                <span>সেভ করুন</span>
-                            </button>
-                            <button id="cn" type="button" onclick="resetFormTally()" hidden class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-300 transition">বাতিল</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Transaction List -->
-                <div class="space-y-4">
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">লেনদেন বিবরণী</h2>
-                    <div id="list" class="space-y-3"></div>
-                </div>
-
-                <!-- Backup & Print -->
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden space-y-4">
-                    <h2 class="text-lg font-bold">ব্যাকআপ, এক্সপোর্ট ও প্রিন্ট</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <button id="eb" class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition flex items-center justify-center gap-1.5">💾 ব্যাকআপ ফাইল</button>
-                        <button id="rs" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 transition flex items-center justify-center gap-1.5">📂 রিস্টোর ফাইল</button>
-                        <button id="ec" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 transition flex items-center justify-center gap-1.5">📊 CSV এক্সপোর্ট</button>
-                        <button id="pr" onclick="window.print()" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 transition flex items-center justify-center gap-1.5">🖨️ প্রিন্ট করুন</button>
-                    </div>
-                    <input type="file" id="file" accept=".json,application/json" hidden>
-                </div>
-            </main>
-            <div id="toastTally" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-2xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-50"></div>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-         APP 4: MOSQUE PAYMENT TRACKER
-         ========================================================================== -->
-    <div id="app-mosque" class="app-container">
-        <div class="mosq-scope">
-            <div class="wrap">
-              <header class="hero">
-                <div class="bism-wrapper">
-                  <div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
-                </div>
-                <div class="bn-m">(পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি)</div>
-                <h1 data-i="name"></h1>
-                <p class="sub" data-i="monthly"></p>
-                <p class="addr" data-i="addr"></p>
-              </header>
-              <section class="stats">
-                <div class="stat"><small data-i="total_paid"></small><b id="sTotal">0</b></div>
-                <div class="stat"><small data-i="months_paid"></small><b id="sCount">0</b></div>
-                <div class="stat"><small data-i="latest"></small><b id="sLast">-</b></div>
-              </section>
-              <div class="acts no-print">
-                <button class="btn" onclick="openEditMosque(-1)"><svg fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg><span data-i="add"></span></button>
-                <button class="ib" data-t="backup" onclick="exportBackupMosque()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M8 11l4 4 4-4M12 4v11"/></svg><span data-i="backup"></span></button>
-                <label class="ib" data-t="restore"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4-4 4M12 4v11"/></svg><span data-i="restore"></span><input type="file" accept=".json" hidden onchange="importBackupMosque(event)"></label>
-                <button class="ib" data-t="print" onclick="window.print()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 9V4h10v5M7 17H5a2 2 0 01-2-2v-4a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2h-2M7 14h10v6H7z"/></svg><span data-i="print"></span></button>
-                <button class="ib" id="langBtn" onclick="toggleLangMosque()" aria-label="Language"></button>
-              </div>
-              <nav class="chips no-print" id="chips"></nav>
-              <div class="ysum" id="ysum"></div>
-              <section class="list" id="listMosque"></section>
-              <div class="total"><span id="totLbl"></span><b id="totAmt">0</b></div>
-              <p class="foot no-print"><b>جزاكم الله خيرا</b><br><span data-i="tip"></span></p>
             </div>
-            <dialog id="dlgMosque">
-              <div class="dh" id="dTitle"></div>
-              <div class="db">
-                <div class="two"><div><label data-i="th_month" for="fM"></label><select id="fM"></select></div><div><label data-i="year" for="fY"></label><select id="fY"></select></div></div>
-                <div><label data-i="th_date" for="fD"></label><input type="date" id="fD"></div>
-                <div><label data-i="th_amt" for="fA"></label><input type="number" id="fA" inputmode="decimal" min="1" step="any"></div>
-              </div>
-              <div class="df"><button class="gh dl" id="dDel" onclick="delEditMosque()" data-i="del"></button><button class="gh" onclick="dlgMosque.close()" data-i="cancel"></button><button class="btn" onclick="saveEditMosque()" data-i="save"></button></div>
-            </dialog>
-            <div id="toastMosque"></div>
         </div>
-    </div>
+    </header>
 
-    <!-- ==========================================================================
-         JAVASCRIPT LOGIC FOR ALL COMBINED APPS
-         ========================================================================== -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+
+        <!-- Government 2.5% Remittance Incentive Notice Card -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-start gap-3">
+                <span class="p-2 bg-emerald-600 text-white rounded-xl text-lg font-bold shadow-sm">২.৫%</span>
+                <div>
+                    <h3 class="font-bold text-emerald-800 dark:text-emerald-300">সরকারি রেমিটেন্স প্রণোদনা (Incentive) হিসাব</h3>
+                    <p class="text-sm text-emerald-700 dark:text-emerald-400">আমিরাত (AED) থেকে বাংলাদেশে পাঠালে সরকারি ২.৫% বোনাস স্বয়ংক্রিয়ভাবে মোট রেটে যোগ হবে।</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-700 shadow-sm self-start md:self-auto">
+                <label for="incentiveToggle" class="text-sm font-semibold cursor-pointer select-none">২.৫% প্রণোদনা হিসাবভুক্ত রাখুন</label>
+                <input type="checkbox" id="incentiveToggle" checked class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+            </div>
+        </div>
+
+        <!-- Dashboard Exchange Rate & Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print:hidden">
+            <!-- Filter Card -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+                <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">ফিল্টার করুন</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-slate-400">মাস</label>
+                        <input type="month" id="mon" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400">মুদ্রা</label>
+                        <select id="cf" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="">সব মুদ্রা</option>
+                            <option value="AED">AED</option>
+                            <option value="BDT">BDT</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="all" class="mt-3 text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline text-left">সব সময়ের হিসাব দেখুন</button>
+            </div>
+
+            <!-- Exchange Rate Card -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm md:col-span-2 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400">বিনিময় হার (Exchange Rate)</h3>
+                    <span id="effectiveRateBadge" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-2.5 py-1 rounded-full">কার্যকর রেট: -- BDT</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-xs text-slate-400">১ AED = কত BDT (মূল ব্যাংকিং রেট)?</label>
+                        <div class="flex items-center gap-2 mt-1">
+                            <input type="number" id="rate" step="0.01" value="33.00" class="w-full text-base font-bold bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <span class="font-bold text-slate-500">BDT</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-500 bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl flex-1 border border-slate-100 dark:border-slate-700">
+                        <p>মূল ব্যাংকিং রেট: <span id="baseRateTxt" class="font-bold">--</span> BDT</p>
+                        <p class="mt-0.5">সরকারি প্রণোদনা (+২.৫%): <span id="incAmtTxt" class="font-bold text-emerald-600 dark:text-emerald-400">--</span> BDT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Balance Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Summary Table Card -->
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h2 class="text-lg font-bold mb-3 flex items-center justify-between">
+                    <span>হিসাব সারসংক্ষেপ</span>
+                    <span class="text-xs font-normal text-slate-400" id="summaryPeriod">বর্তমান ফিল্টার</span>
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-400">
+                                <th class="pb-2">মুদ্রা</th>
+                                <th class="pb-2 text-right">মোট আয়</th>
+                                <th class="pb-2 text-right">মোট ব্যয়</th>
+                                <th class="pb-2 text-right">অবশিষ্ট</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sum" class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Combined Balance Card -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">একত্রিত নিট ক্যাশ (Combined Balance)</span>
+                    <h3 class="text-xs text-slate-400 mt-1" id="rateDisclaimer">১ AED = -- BDT (প্রণোদনা সহ)</h3>
+                </div>
+                <div class="my-4 space-y-2">
+                    <div>
+                        <p class="text-xs text-slate-400">আনুমানিক মোট (AED-তে):</p>
+                        <p class="text-3xl font-extrabold text-emerald-400" id="combAED">0.00 AED</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">আনুমানিক মোট (BDT-তে):</p>
+                        <p class="text-xl font-bold text-slate-200" id="combBDT">0.00 BDT</p>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 italic">* ২.৫% ইনসেনটিভ চালুর কারণে AED থেকে BDT করার সময় বোনাস টাকা স্বয়ংক্রিয় যোগ হচ্ছে।</p>
+            </div>
+        </div>
+
+        <!-- Form Section: Add / Edit Entry -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden">
+            <h2 id="ft" class="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                নতুন হিসাব যোগ করুন
+            </h2>
+            <form id="f" class="space-y-4">
+                <!-- Type Selection -->
+                <div class="flex rounded-xl bg-slate-100 dark:bg-slate-700 p-1">
+                    <button type="button" id="btnTypeOut" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white" onclick="setType('out')">ব্যয় (Expense)</button>
+                    <button type="button" id="btnTypeIn" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300" onclick="setType('in')">আয় (Income)</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Amount -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">পরিমাণ</label>
+                        <input type="number" id="amt" step="0.01" min="0.01" inputmode="decimal" required placeholder="0.00" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <!-- Currency Selector -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">মুদ্রা</label>
+                        <div class="flex rounded-lg border border-slate-200 dark:border-slate-600 overflow-hidden">
+                            <button type="button" id="btnCurAED" class="flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white" onclick="setCur('AED')">AED</button>
+                            <button type="button" id="btnCurBDT" class="flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300" onclick="setCur('BDT')">BDT</button>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">তারিখ</label>
+                        <input type="date" id="dt" required class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">ক্যাটেগরি</label>
+                        <select id="cat" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none"></select>
+                    </div>
+                </div>
+
+                <!-- Description Note -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">বিবরণ / নোট (ঐচ্ছিক)</label>
+                    <input type="text" id="note" maxlength="200" placeholder="যেমন: দেশে রেমিটেন্স পাঠালাম" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-3 pt-2">
+                    <button id="sb" type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-md flex items-center gap-2">
+                        <span>সেভ করুন</span>
+                    </button>
+                    <button id="cn" type="button" onclick="resetForm()" hidden class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-300 transition">বাতিল</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Transaction Entries List -->
+        <div class="space-y-4">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">লেনদেন বিবরণী</h2>
+            <div id="list" class="space-y-3">
+                <!-- Dynamic List -->
+            </div>
+        </div>
+
+        <!-- Backup & Tools -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden space-y-4">
+            <h2 class="text-lg font-bold">ব্যাকআপ, এক্সপোর্ট ও প্রিন্ট</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <button id="eb" class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition flex items-center justify-center gap-1.5">
+                    💾 ব্যাকআপ ফাইল
+                </button>
+                <button id="rs" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    📂 রিস্টোর ফাইল
+                </button>
+                <button id="ec" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    📊 CSV এক্সপোর্ট
+                </button>
+                <button id="pr" onclick="window.print()" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    🖨️ প্রিন্ট করুন
+                </button>
+            </div>
+            <input type="file" id="file" accept=".json,application/json" hidden>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-2xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-50"></div>
+
+    <!-- Script Block with Enhanced Fallback Auth and Storage -->
     <script>
-        // MASTER SWITCHING LOGIC
-        function switchApp(appId, btn) {
-            document.querySelectorAll('.app-container').forEach(el => el.classList.remove('active-app'));
-            document.querySelectorAll('.master-tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('app-' + appId).classList.add('active-app');
-            btn.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        /* --------------------------------------------------------------------------
-           1. LOGIC FOR ACCOUNTS
-           -------------------------------------------------------------------------- */
-        let defUae=[{name:"HSBC",val:"0.00"},{name:"HSBC GMA",val:"0.00"},{name:"Ruya",val:"0.00"},{name:"Payit",val:"0.00"},{name:"Botim",val:"0.00"},{name:"Tabby Debit",val:"0.00"}];
-        let defExp=[{name:"For Mother",val:"0.00"},{name:"For House Rent",val:"0.00"},{name:"For WiFi Bill",val:"0.00"},{name:"For Gas Cylinder",val:"0.00"},{name:"For Dust Bill",val:"0.00"},{name:"For Madrasha Fee's",val:"0.00"},{name:"For Tutor Fee's",val:"0.00"},{name:"For Electric Bill",val:"0.00"},{name:"For Food & Others",val:"0.00"}];
-        let defCc=[{name:"Next Month",val:"0.00"},{name:"Next Next Month",val:"0.00"},{name:"Next Next Next Month",val:"0.00"},{name:"Next Next Next Next Month",val:"0.00"},{name:"Next Next Next Next Next Month",val:"0.00"}];
-        let defSplit=[{name:"Next Month",val:"0.00"},{name:"Next Next Month",val:"0.00"},{name:"Next Next Next Month",val:"0.00"},{name:"Next Next Next Next Month",val:"0.00"},{name:"Next Next Next Next Next Month",val:"0.00"}];
-
-        function renderUaeTable(accs){let tb=document.getElementById('uaeTbody');tb.innerHTML='';accs.forEach((a,i)=>{tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${a.name}</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="uae-val" id="uaeVal_${i}" oninput="calculateAll()">${a.val}</span></td></tr>`;});}
-        function addUaeRow(){let tb=document.getElementById('uaeTbody');tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Account</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="uae-val" oninput="calculateAll()">0.00</span></td></tr>`;calculateAll();}
-        function deleteUaeRow(b){b.closest('tr').remove();calculateAll();}
-
-        function renderExpensesTable(exps){let tb=document.getElementById('expensesTbody');tb.innerHTML='';exps.forEach((e,i)=>{tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${e.name}</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="exp-val" id="expVal_${i}" oninput="calculateAll()">${e.val}</span></td></tr>`;});}
-        function addExpenseRow(){let tb=document.getElementById('expensesTbody');tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Expense</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="exp-val" oninput="calculateAll()">0.00</span></td></tr>`;calculateAll();}
-        function deleteExpenseRow(b){b.closest('tr').remove();calculateAll();}
-
-        function renderCcTable(data){let tb=document.getElementById('ccTbody');tb.innerHTML='';data.forEach((item,i)=>{tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${item.name}</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteCcRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="cc-val" id="ccVal_${i}" oninput="calculateAll()">${item.val}</span></td></tr>`;});}
-        function addCcRow(){let tb=document.getElementById('ccTbody');tb.innerHTML+=`<tr><td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Month</span></td><td style="text-align: center;"><button class="delete-row-btn" onclick="deleteCcRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="text-align: right;"><span contenteditable="true" class="cc-val" oninput="calculateAll()">0.00</span></td></tr>`;calculateAll();}
-        function deleteCcRow(b){b.closest('tr').remove();calculateAll();}
-
-        function renderSplitTable(data){let tb=document.getElementById('splitTbody');tb.innerHTML='';data.forEach((item,i)=>{tb.innerHTML+=`<tr><td style="width: 46%;"><span contenteditable="true" class="editable-label" oninput="calculateAll()">${item.name}</span></td><td style="width: 16%; text-align: center;"><button class="delete-row-btn" onclick="deleteSplitRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td><td style="width: 38%; text-align: right;"><span contenteditable="true" class="split-val" id="splitVal_${i}" oninput="calculateAll()">${item.val}</span></td></tr>`;});}
-        function deleteSplitRow(b){b.closest('tr').remove();calculateAll();}
-
-        function updateDateTimeAccounts(){let n=new Date();let lt=document.getElementById('liveTime');if(lt)lt.innerText=n.toLocaleTimeString();let fy=document.getElementById('footerYear');if(fy)fy.innerText=n.getFullYear();}
-        setInterval(updateDateTimeAccounts,1000);
-
-        async function initUserLocationAndWidgetsAccounts(){try{let res=await fetch('https://ipapi.co/json/');let d=await res.json();if(d&&d.city){document.getElementById('locationText').innerText=`${d.city}, ${d.country_name||d.country}`;fetchWeatherAccounts(d.latitude,d.longitude);}else{throw new Error();}}catch(e){document.getElementById('locationText').innerText="Dubai, UAE";fetchWeatherAccounts(25.2048,55.2708);}}
-        async function fetchWeatherAccounts(lat,lon){try{let res=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);let d=await res.json();if(d&&d.current){document.getElementById('weatherTemp').innerText=`${Math.round(d.current.temperature_2m)}°C`;document.getElementById('weatherCondition').innerText="Clear Sky";}}catch(e){document.getElementById('weatherCondition').innerText="Weather unavailable";}}
-
-        function handlePrintAccounts(){let n=new Date();document.getElementById('printTimestamp').innerText=`তারিখ ও সময়: ${n.toLocaleString('bn-BD')}`;window.print();}
-        function getCalendarDataAccounts(){let n=new Date(),y=n.getFullYear(),m=n.getMonth(),t=n.getDate(),tot=new Date(y,m+1,0).getDate(),sun=0,psun=0;for(let d=1;d<=tot;d++){let c=new Date(y,m,d);if(c.getDay()===0){sun++;if(d<=t)psun++;}}let w=tot-sun;return{workingDaysTotal:w>0?w:1,pastWorkingDays:(t-psun)>=0?(t-psun):0};}
-        function renderDailyCalendarAccounts(){let n=new Date(),y=n.getFullYear(),m=n.getMonth(),t=n.getDate(),mn=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],fmn=["January","February","March","April","May","June","July","August","September","October","November","December"],wd=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];document.getElementById('calMonthName').innerText=mn[m];document.getElementById('calDayNum').innerText=t<10?'0'+t:t;document.getElementById('calWeekdayName').innerText=wd[n.getDay()];document.getElementById('calFullDateText').innerText=`${fmn[m]} ${t}, ${y}`;}
-
-        function toggleThemeAccounts(){let h=document.getElementById('accScopeRoot'),b=document.getElementById('themeBtn');if(h.getAttribute('data-theme')==='light'){h.setAttribute('data-theme','dark');b.innerText='☀️';localStorage.setItem('abdul_theme','dark');}else{h.setAttribute('data-theme','light');b.innerText='🌙';localStorage.setItem('abdul_theme','light');}}
-        function getNum(v){let x=parseFloat(v);return isNaN(x)?0:x;}
-
-        function calculateAll(){
-          let rate=getNum(document.getElementById('rateInput').innerText),aed=getNum(document.getElementById('aedAmountInput').innerText);
-          let inc=rate+(rate*0.025);document.getElementById('incentiveResult').innerText=inc.toFixed(4);
-          let finalRes=inc*aed;document.getElementById('finalResult').innerText=finalRes.toFixed(2);
-          let expRows=document.querySelectorAll('#expensesTbody tr'),expTotal=0;expRows.forEach(r=>expTotal+=getNum(r.querySelector('.exp-val').innerText));
-          document.getElementById('expTotalResult').innerText=expTotal.toFixed(2);
-          document.getElementById('expInAedResult').innerText=(inc>0?expTotal/inc:0).toFixed(2);
-          let uaeRows=document.querySelectorAll('#uaeTbody tr'),uaeTot=0;uaeRows.forEach(r=>uaeTot+=getNum(r.querySelector('.uae-val').innerText));
-          let cal=getCalendarDataAccounts(),abs=getNum(document.getElementById('absentDaysInput').innerText),pwd=cal.pastWorkingDays-abs;if(pwd<0)pwd=0;
-          let sal=(((342/26)*cal.workingDaysTotal+1920)/cal.workingDaysTotal)*pwd;document.getElementById('salaryResult').innerText=sal.toFixed(2);
-          let otDays=getNum(document.getElementById('otDaysInput').innerText),otAmt=73.25*otDays;document.getElementById('otResult').innerText=otAmt.toFixed(2);
-          let salOt=sal+otAmt;document.getElementById('salaryOtTotalResult').innerText=salOt.toFixed(2);
-          let totAed=uaeTot+salOt;document.getElementById('uaeTotalAED').innerText=totAed.toFixed(2);
-          let totBdt=totAed*inc;document.getElementById('uaeTotalBDT').innerText=totBdt.toFixed(2);
-          let mtbS=getNum(document.getElementById('mtbSavingsInput').innerText),mtbN=getNum(document.getElementById('mtbNrbInput').innerText),brac=getNum(document.getElementById('bracProvashiInput').innerText),dbblA=getNum(document.getElementById('dbblAgentInput').innerText),ucbl=getNum(document.getElementById('ucblIslamicInput').innerText);
-          let usable=mtbS+mtbN+brac+dbblA+ucbl;document.getElementById('usableAmountResult').innerText=usable.toFixed(2);
-          let dbblC=getNum(document.getElementById('dbblCoreInput').innerText),pub=getNum(document.getElementById('pubaliIslamicInput').innerText),ibbl=getNum(document.getElementById('ibblSavingsInput').innerText);
-          let hold=dbblC+pub+ibbl;document.getElementById('holdAmountResult').innerText=hold.toFixed(2);
-
-          let ccRows=document.querySelectorAll('#ccTbody tr'),ccTot=0;
-          ccRows.forEach(r=>ccTot+=getNum(r.querySelector('.cc-val').innerText));
-          document.getElementById('ccTotalResult').innerText=ccTot.toFixed(2);
-
-          let tLim=getNum(document.getElementById('tabbyLimitInput').innerText),tSplit=getNum(document.getElementById('tabbySplitInput').innerText);
-          document.getElementById('tabbyOutstandingResult').innerText=ccTot.toFixed(2);
-          let tUsed=ccTot-tSplit;document.getElementById('tabbyUsedResult').innerText=tUsed.toFixed(2);
-          document.getElementById('tabbyBalanceResult').innerText=(tLim-tUsed).toFixed(2);
-
-          let splitRows=document.querySelectorAll('#splitTbody tr'),sTot=0;
-          splitRows.forEach(r=>sTot+=getNum(r.querySelector('.split-val').innerText));
-          document.getElementById('splitTotalResult').innerText=sTot.toFixed(2);
-
-          let firstCcVal = ccRows.length > 0 ? getNum(ccRows[0].querySelector('.cc-val').innerText) : 0;
-          let firstSplitVal = splitRows.length > 0 ? getNum(splitRows[0].querySelector('.split-val').innerText) : 0;
-          document.getElementById('upcomingPaymentResult').innerText=(firstCcVal + firstSplitVal).toFixed(2);
-
-          let invDp=getNum(document.getElementById('investmentDownPaymentInput').innerText),invIns=getNum(document.getElementById('investmentInstallmentInput').innerText);
-          let invTot=invDp+invIns;document.getElementById('investmentTotalResult').innerText=invTot.toFixed(2);
-          let zCash=getNum(document.getElementById('zakatCashInput').innerText),gGram=getNum(document.getElementById('zakatGoldGramInput').innerText),gPrice=getNum(document.getElementById('zakatGoldPriceInput').innerText);
-          let gVal=(gGram*gPrice)*0.83;document.getElementById('zakatGoldValueResult').innerText=gVal.toFixed(2);
-          let zBus=getNum(document.getElementById('zakatBusinessInput').innerText),zRec=getNum(document.getElementById('zakatReceivablesInput').innerText);
-          let zAssets=zCash+gVal+zBus+zRec;document.getElementById('zakatTotalAssets').innerText=zAssets.toFixed(2);
-          let zLiab=getNum(document.getElementById('zakatLiabilitiesInput').innerText),zNet=zAssets-zLiab;if(zNet<0)zNet=0;document.getElementById('zakatNetWealth').innerText=zNet.toFixed(2);
-          let sPrice=getNum(document.getElementById('zakatSilverPriceInput').innerText),nisab=612.36*sPrice;document.getElementById('zakatNisabThreshold').innerText=nisab.toFixed(2);
-          let zPay=0;if(zNet>=nisab&&nisab>0){document.getElementById('zakatNisabStatus').innerText='Eligible';document.getElementById('zakatNisabStatus').style.color='#10b981';zPay=zNet*0.025;}else{document.getElementById('zakatNisabStatus').innerText='Not Eligible';}
-          document.getElementById('zakatPayableResult').innerText=zPay.toFixed(2);
-          saveDataSilentlyAccounts();
-        }
-
-        function exportToJSON(){
-          let uaeData=[];document.querySelectorAll('#uaeTbody tr').forEach(tr=>uaeData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.uae-val').innerText}));
-          let expData=[];document.querySelectorAll('#expensesTbody tr').forEach(tr=>expData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.exp-val').innerText}));
-          let ccData=[];document.querySelectorAll('#ccTbody tr').forEach(tr=>ccData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.cc-val').innerText}));
-          let splitData=[];document.querySelectorAll('#splitTbody tr').forEach(tr=>splitData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.split-val').innerText}));
-
-          let ds={
-            uaeAccounts:uaeData, expenses:expData, ccAccounts:ccData, splitAccounts:splitData,
-            rate:document.getElementById('rateInput').innerText,
-            aedAmount:document.getElementById('aedAmountInput').innerText,
-            absentDays:document.getElementById('absentDaysInput').innerText,
-            otDays:document.getElementById('otDaysInput').innerText,
-            mtbSavings:document.getElementById('mtbSavingsInput').innerText,
-            mtbNrb:document.getElementById('mtbNrbInput').innerText,
-            bracProvashi:document.getElementById('bracProvashiInput').innerText,
-            dbblAgent:document.getElementById('dbblAgentInput').innerText,
-            ucblIslamic:document.getElementById('ucblIslamicInput').innerText,
-            dbblCore:document.getElementById('dbblCoreInput').innerText,
-            pubaliIslamic:document.getElementById('pubaliIslamicInput').innerText,
-            ibblSavings:document.getElementById('ibblSavingsInput').innerText,
-            tabbyLimit:document.getElementById('tabbyLimitInput').innerText,
-            tabbySplit:document.getElementById('tabbySplitInput').innerText,
-            investmentDownPayment:document.getElementById('investmentDownPaymentInput').innerText,
-            investmentInstallment:document.getElementById('investmentInstallmentInput').innerText,
-            zakatCash:document.getElementById('zakatCashInput').innerText,
-            zakatGoldGram:document.getElementById('zakatGoldGramInput').innerText,
-            zakatGoldPrice:document.getElementById('zakatGoldPriceInput').innerText,
-            zakatBusiness:document.getElementById('zakatBusinessInput').innerText,
-            zakatReceivables:document.getElementById('zakatReceivablesInput').innerText,
-            zakatLiabilities:document.getElementById('zakatLiabilitiesInput').innerText,
-            zakatSilverPrice:document.getElementById('zakatSilverPriceInput').innerText
-          };
-          let blob=new Blob([JSON.stringify(ds,null,2)],{type:"application/json"});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`Financial_Dashboard_Backup_${new Date().toISOString().slice(0,10)}.json`;a.click();
-        }
-
-        function importFromJSON(e){
-          let f=e.target.files[0];if(!f)return;let r=new FileReader();
-          r.onload=function(ev){
-            try{
-              let ds=JSON.parse(ev.target.result);
-              if(ds.uaeAccounts)renderUaeTable(ds.uaeAccounts);
-              if(ds.expenses)renderExpensesTable(ds.expenses);
-              if(ds.ccAccounts)renderCcTable(ds.ccAccounts);
-              if(ds.splitAccounts)renderSplitTable(ds.splitAccounts);
-
-              if(ds.rate!==undefined)document.getElementById('rateInput').innerText=ds.rate;
-              if(ds.aedAmount!==undefined)document.getElementById('aedAmountInput').innerText=ds.aedAmount;
-              if(ds.absentDays!==undefined)document.getElementById('absentDaysInput').innerText=ds.absentDays;
-              if(ds.otDays!==undefined)document.getElementById('otDaysInput').innerText=ds.otDays;
-              if(ds.mtbSavings!==undefined)document.getElementById('mtbSavingsInput').innerText=ds.mtbSavings;
-              if(ds.mtbNrb!==undefined)document.getElementById('mtbNrbInput').innerText=ds.mtbNrb;
-              if(ds.bracProvashi!==undefined)document.getElementById('bracProvashiInput').innerText=ds.bracProvashi;
-              if(ds.dbblAgent!==undefined)document.getElementById('dbblAgentInput').innerText=ds.dbblAgent;
-              if(ds.ucblIslamic!==undefined)document.getElementById('ucblIslamicInput').innerText=ds.ucblIslamic;
-              if(ds.dbblCore!==undefined)document.getElementById('dbblCoreInput').innerText=ds.dbblCore;
-              if(ds.pubaliIslamic!==undefined)document.getElementById('pubaliIslamicInput').innerText=ds.pubaliIslamic;
-              if(ds.ibblSavings!==undefined)document.getElementById('ibblSavingsInput').innerText=ds.ibblSavings;
-              if(ds.tabbyLimit!==undefined)document.getElementById('tabbyLimitInput').innerText=ds.tabbyLimit;
-              if(ds.tabbySplit!==undefined)document.getElementById('tabbySplitInput').innerText=ds.tabbySplit;
-              if(ds.investmentDownPayment!==undefined)document.getElementById('investmentDownPaymentInput').innerText=ds.investmentDownPayment;
-              if(ds.investmentInstallment!==undefined)document.getElementById('investmentInstallmentInput').innerText=ds.investmentInstallment;
-              if(ds.zakatCash!==undefined)document.getElementById('zakatCashInput').innerText=ds.zakatCash;
-              if(ds.zakatGoldGram!==undefined)document.getElementById('zakatGoldGramInput').innerText=ds.zakatGoldGram;
-              if(ds.zakatGoldPrice!==undefined)document.getElementById('zakatGoldPriceInput').innerText=ds.zakatGoldPrice;
-              if(ds.zakatBusiness!==undefined)document.getElementById('zakatBusinessInput').innerText=ds.zakatBusiness;
-              if(ds.zakatReceivables!==undefined)document.getElementById('zakatReceivablesInput').innerText=ds.zakatReceivables;
-              if(ds.zakatLiabilities!==undefined)document.getElementById('zakatLiabilitiesInput').innerText=ds.zakatLiabilities;
-              if(ds.zakatSilverPrice!==undefined)document.getElementById('zakatSilverPriceInput').innerText=ds.zakatSilverPrice;
-
-              calculateAll();
-              alert('Backup restored successfully!');
-            }catch(err){alert('Failed to read backup file.');}
-            e.target.value='';
-          };
-          r.readAsText(f);
-        }
-
-        function saveDataSilentlyAccounts(){
-          let uaeData=[];document.querySelectorAll('#uaeTbody tr').forEach(tr=>uaeData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.uae-val').innerText}));
-          let expData=[];document.querySelectorAll('#expensesTbody tr').forEach(tr=>expData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.exp-val').innerText}));
-          let ccData=[];document.querySelectorAll('#ccTbody tr').forEach(tr=>ccData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.cc-val').innerText}));
-          let splitData=[];document.querySelectorAll('#splitTbody tr').forEach(tr=>splitData.push({name:tr.querySelector('.editable-label').innerText,val:tr.querySelector('.split-val').innerText}));
-
-          let ds={
-            uaeAccounts:uaeData, expenses:expData, ccAccounts:ccData, splitAccounts:splitData,
-            rate:document.getElementById('rateInput').innerText,
-            aedAmount:document.getElementById('aedAmountInput').innerText,
-            absentDays:document.getElementById('absentDaysInput').innerText,
-            otDays:document.getElementById('otDaysInput').innerText,
-            mtbSavings:document.getElementById('mtbSavingsInput').innerText,
-            mtbNrb:document.getElementById('mtbNrbInput').innerText,
-            bracProvashi:document.getElementById('bracProvashiInput').innerText,
-            dbblAgent:document.getElementById('dbblAgentInput').innerText,
-            ucblIslamic:document.getElementById('ucblIslamicInput').innerText,
-            dbblCore:document.getElementById('dbblCoreInput').innerText,
-            pubaliIslamic:document.getElementById('pubaliIslamicInput').innerText,
-            ibblSavings:document.getElementById('ibblSavingsInput').innerText,
-            tabbyLimit:document.getElementById('tabbyLimitInput').innerText,
-            tabbySplit:document.getElementById('tabbySplitInput').innerText,
-            investmentDownPayment:document.getElementById('investmentDownPaymentInput').innerText,
-            investmentInstallment:document.getElementById('investmentInstallmentInput').innerText,
-            zakatCash:document.getElementById('zakatCashInput').innerText,
-            zakatGoldGram:document.getElementById('zakatGoldGramInput').innerText,
-            zakatGoldPrice:document.getElementById('zakatGoldPriceInput').innerText,
-            zakatBusiness:document.getElementById('zakatBusinessInput').innerText,
-            zakatReceivables:document.getElementById('zakatReceivablesInput').innerText,
-            zakatLiabilities:document.getElementById('zakatLiabilitiesInput').innerText,
-            zakatSilverPrice:document.getElementById('zakatSilverPriceInput').innerText
-          };
-          localStorage.setItem('abdul_fin_v22',JSON.stringify(ds));
-        }
-
-        function saveData(){calculateAll();let m=document.getElementById('success-msg');m.style.display='inline';setTimeout(()=>m.style.display='none',3000);}
-
-        function initAccountsApp(){
-          if(localStorage.getItem('abdul_theme')==='dark'){document.getElementById('accScopeRoot').setAttribute('data-theme','dark');document.getElementById('themeBtn').innerText='☀️';}
-          let saved=localStorage.getItem('abdul_fin_v22');
-          if(saved){
-            try{
-              let d=JSON.parse(saved);
-              renderUaeTable(d.uaeAccounts||defUae);
-              renderExpensesTable(d.expenses||defExp);
-              renderCcTable(d.ccAccounts||defCc);
-              renderSplitTable(d.splitAccounts||defSplit);
-
-              if(d.rate!==undefined)document.getElementById('rateInput').innerText=d.rate;
-              if(d.aedAmount!==undefined)document.getElementById('aedAmountInput').innerText=d.aedAmount;
-              if(d.absentDays!==undefined)document.getElementById('absentDaysInput').innerText=d.absentDays;
-              if(d.otDays!==undefined)document.getElementById('otDaysInput').innerText=d.otDays;
-              if(d.mtbSavings!==undefined)document.getElementById('mtbSavingsInput').innerText=d.mtbSavings;
-              if(d.mtbNrb!==undefined)document.getElementById('mtbNrbInput').innerText=d.mtbNrb;
-              if(d.bracProvashi!==undefined)document.getElementById('bracProvashiInput').innerText=d.bracProvashi;
-              if(d.dbblAgent!==undefined)document.getElementById('dbblAgentInput').innerText=d.dbblAgent;
-              if(d.ucblIslamic!==undefined)document.getElementById('ucblIslamicInput').innerText=d.ucblIslamic;
-              if(d.dbblCore!==undefined)document.getElementById('dbblCoreInput').innerText=d.dbblCore;
-              if(d.pubaliIslamic!==undefined)document.getElementById('pubaliIslamicInput').innerText=d.pubaliIslamic;
-              if(d.ibblSavings!==undefined)document.getElementById('ibblSavingsInput').innerText=d.ibblSavings;
-              if(d.tabbyLimit!==undefined)document.getElementById('tabbyLimitInput').innerText=d.tabbyLimit;
-              if(d.tabbySplit!==undefined)document.getElementById('tabbySplitInput').innerText=d.tabbySplit;
-              if(d.investmentDownPayment!==undefined)document.getElementById('investmentDownPaymentInput').innerText=d.investmentDownPayment;
-              if(d.investmentInstallment!==undefined)document.getElementById('investmentInstallmentInput').innerText=d.investmentInstallment;
-              if(d.zakatCash!==undefined)document.getElementById('zakatCashInput').innerText=d.zakatCash;
-              if(d.zakatGoldGram!==undefined)document.getElementById('zakatGoldGramInput').innerText=d.zakatGoldGram;
-              if(d.zakatGoldPrice!==undefined)document.getElementById('zakatGoldPriceInput').innerText=d.zakatGoldPrice;
-              if(d.zakatBusiness!==undefined)document.getElementById('zakatBusinessInput').innerText=d.zakatBusiness;
-              if(d.zakatReceivables!==undefined)document.getElementById('zakatReceivablesInput').innerText=d.zakatReceivables;
-              if(d.zakatLiabilities!==undefined)document.getElementById('zakatLiabilitiesInput').innerText=d.zakatLiabilities;
-              if(d.zakatSilverPrice!==undefined)document.getElementById('zakatSilverPriceInput').innerText=d.zakatSilverPrice;
-            }catch(err){
-              renderUaeTable(defUae);renderExpensesTable(defExp);renderCcTable(defCc);renderSplitTable(defSplit);
-            }
-          }else{
-            renderUaeTable(defUae);
-            renderExpensesTable(defExp);
-            renderCcTable(defCc);
-            renderSplitTable(defSplit);
-          }
-          calculateAll();
-          initUserLocationAndWidgetsAccounts();
-          renderDailyCalendarAccounts();
-          updateDateTimeAccounts();
-        }
-
-        setInterval(function(){
-          const map={snapUsable:'usableAmountResult',snapHold:'holdAmountResult',snapUae:'uaeTotalBDT',snapCc:'ccTotalResult',snapZakat:'zakatPayableResult',snapInvestment:'investmentTotalResult',snapExpenses:'expTotalResult'};
-          Object.keys(map).forEach(k=>{let s=document.getElementById(map[k]),d=document.getElementById(k);if(s&&d)d.textContent=s.textContent.trim();});
-        },300);
-
-        /* --------------------------------------------------------------------------
-           2. LOGIC FOR FAMILY EXPENSES
-           -------------------------------------------------------------------------- */
-        const formFam=document.getElementById('expenseFormFamily');
-        let allTransactionsFam=[];
-        let currentSelectedYearFam=new Date().getFullYear().toString();
-        let currentSelectedMonthFam='all';
-
-        function saveToLocalStorageFam(){localStorage.setItem('operational_expenses_data',JSON.stringify(allTransactionsFam));}
-        function loadFromLocalStorageFam(){
-            const savedData=localStorage.getItem('operational_expenses_data');
-            if(savedData){try{allTransactionsFam=JSON.parse(savedData);}catch(e){allTransactionsFam=[];}}
-        }
-        function initializeYearsFam(){
-            const currentYear=new Date().getFullYear().toString();
-            const yearTabs=document.getElementById('yearTabs');
-            let yearsSet=new Set([currentYear,currentSelectedYearFam]);
-            allTransactionsFam.forEach(item=>yearsSet.add(item.year));
-            let sortedYears=Array.from(yearsSet).sort((a,b)=>b-a);
-            yearTabs.innerHTML='';
-            sortedYears.forEach(y=>{
-                let btn=document.createElement('button');
-                btn.className=`tab-btn ${y===currentSelectedYearFam?'active':''}`;
-                btn.innerText=y;
-                btn.onclick=(e)=>selectYearFamily(y,e.target);
-                yearTabs.appendChild(btn);
-            });
-        }
-        function selectYearFamily(year,element){
-            currentSelectedYearFam=year;
-            document.querySelectorAll('#yearTabs .tab-btn').forEach(b=>b.classList.remove('active'));
-            element.classList.add('active');
-            filterAndDisplayDataFam();
-        }
-        function selectMonthFamily(month,element){
-            currentSelectedMonthFam=month;
-            document.querySelectorAll('#monthTabs .tab-btn').forEach(b=>b.classList.remove('active'));
-            element.classList.add('active');
-            filterAndDisplayDataFam();
-        }
-        function resetToHomeFamily(){
-            currentSelectedYearFam=new Date().getFullYear().toString();
-            currentSelectedMonthFam='all';
-            initializeYearsFam();
-            document.querySelectorAll('#monthTabs .tab-btn')[0].classList.add('active');
-            document.querySelectorAll('#monthTabs .tab-btn').forEach((b,idx)=>{if(idx>0)b.classList.remove('active');});
-            filterAndDisplayDataFam();
-        }
-        function toggleThemeFamily(){
-            const html=document.getElementById('famScopeRoot');
-            const icon=document.getElementById('themeIconFam');
-            if(html.getAttribute('data-theme')==='light'){
-                html.setAttribute('data-theme','dark');
-                icon.className='fas fa-sun';
-                localStorage.setItem('family_theme','dark');
-            }else{
-                html.setAttribute('data-theme','light');
-                icon.className='fas fa-moon';
-                localStorage.setItem('family_theme','light');
-            }
-        }
-
-        if(formFam){
-            formFam.addEventListener('submit',e=>{
-                e.preventDefault();
-                const rawDate=document.getElementById('dateFam').value;
-                const itemDate=new Date(rawDate);
-                const entryYear=itemDate.getFullYear().toString();
-                const data={
-                    category:document.getElementById('categoryFam').value,
-                    amount:Number(document.getElementById('amountFam').value),
-                    date:rawDate,
-                    year:entryYear,
-                    month:itemDate.getMonth().toString()
-                };
-                allTransactionsFam.unshift(data);
-                saveToLocalStorageFam();
-                currentSelectedYearFam=entryYear;
-                initializeYearsFam();
-                filterAndDisplayDataFam();
-                formFam.reset();
-                document.getElementById('dateFam').valueAsDate = new Date();
-            });
-        }
-
-        function exportToCSVFamily(){
-            if(allTransactionsFam.length===0){alert('ব্যাকআপ নেওয়ার মতো কোনো ডাটা নেই!');return;}
-            let csvContent="\uFEFFDate,Category,Amount,Year,Month\n";
-            allTransactionsFam.forEach(item=>{
-                let row=`"${item.date}","${item.category.replace(/"/g,'""')}","${item.amount}","${item.year}","${item.month}"`;
-                csvContent+=row+"\n";
-            });
-            const blob=new Blob([csvContent],{type:'text/csv;charset=utf-8;'});
-            const url=URL.createObjectURL(blob);
-            const link=document.createElement('a');
-            link.setAttribute('href',url);
-            link.setAttribute('download',`Family_Operational_Expense_Backup_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function importFromCSVFamily(event){
-            const file=event.target.files[0];
-            if(!file)return;
-            const reader=new FileReader();
-            reader.onload=function(e){
-                const text=e.target.result;
-                const lines=text.split('\n');
-                let importedData=[];
-                for(let i=1;i<lines.length;i++){
-                    let line=lines[i].trim();
-                    if(!line)continue;
-                    let row=line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if(!row||row.length<5){row=line.split(',');}
-                    if(row&&row.length>=5){
-                        let date=row[0].replace(/"/g,'').trim();
-                        let category=row[1].replace(/"/g,'').trim();
-                        let amount=Number(row[2].replace(/"/g,'').trim());
-                        let year=row[3].replace(/"/g,'').trim();
-                        let month=row[4].replace(/"/g,'').trim();
-                        if(date&&!isNaN(amount)){importedData.push({date,category,amount,year,month});}
-                    }
-                }
-                if(importedData.length>0){
-                    allTransactionsFam=importedData;
-                    saveToLocalStorageFam();
-                    initializeYearsFam();
-                    filterAndDisplayDataFam();
-                    alert(`সফলভাবে ${importedData.length} টি এন্ট্রি রিস্টোর করা হয়েছে!`);
-                }else{alert('ফাইল থেকে সঠিক ডাটা রিড করা সম্ভব হয়নি।');}
-                event.target.value='';
-            };
-            reader.readAsText(file,'UTF-8');
-        }
-
-        function filterAndDisplayDataFam(){
-            const tbody=document.getElementById('expenseTableBody');
-            const filtered=allTransactionsFam.filter(item=>{
-                let matchYear=item.year===currentSelectedYearFam;
-                let matchMonth=currentSelectedMonthFam==='all'||item.month===currentSelectedMonthFam;
-                return matchYear&&matchMonth;
-            });
-            if(filtered.length===0){
-                tbody.innerHTML=`<tr><td colspan="4"><div class="empty-state"><i class="fas fa-folder-open"></i><p>এই সময়ে কোনো খরচের হিসাব নেই।</p></div></td></tr>`;
-            }else{
-                tbody.innerHTML='';
-                filtered.forEach(item=>{
-                    const row=document.createElement('tr');
-                    row.innerHTML=`<td>${item.date}</td><td>${item.category}</td><td><span class="badge">খরচ</span></td><td class="amt">৳ ${item.amount.toLocaleString('bn-BD')}</td>`;
-                    tbody.appendChild(row);
-                });
-            }
-            calculateStatsFam();
-        }
-
-        function calculateStatsFam(){
-            const monthNames = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-            const yearFiltered = allTransactionsFam.filter(item => item.year === currentSelectedYearFam);
-            const realYearTotal = yearFiltered.reduce((sum, item) => sum + item.amount, 0);
-            const realMonthFiltered = yearFiltered.filter(item => currentSelectedMonthFam === 'all' || item.month === currentSelectedMonthFam);
-            const realMonthTotal = realMonthFiltered.reduce((sum, item) => sum + item.amount, 0);
-
-            if (currentSelectedMonthFam === 'all') {
-                document.getElementById('currentMonthLabel').innerText = `${currentSelectedYearFam} সালের সর্বমোট খরচ`;
-            } else {
-                document.getElementById('currentMonthLabel').innerText = `${monthNames[Number(currentSelectedMonthFam)]} (${currentSelectedYearFam}) এর মোট খরচ`;
-            }
-            document.getElementById('currentYearLabel').innerText = `${currentSelectedYearFam} সালের মোট খরচ`;
-
-            document.getElementById('monthlyExpense').innerText = '৳ ' + realMonthTotal.toLocaleString('bn-BD');
-            document.getElementById('yearlyExpense').innerText = '৳ ' + realYearTotal.toLocaleString('bn-BD');
-            renderBarsFam(yearFiltered);
-        }
-
-        function renderBarsFam(yearFiltered){
-            const short=['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্টে','অক্টো','নভে','ডিসে'];
-            const totals=Array(12).fill(0);
-            yearFiltered.forEach(i=>totals[Number(i.month)]+=i.amount);
-            const max=Math.max(...totals,1);
-            const box=document.getElementById('bars');
-            box.innerHTML='';
-            totals.forEach((t,i)=>{
-                const b=document.createElement('button');
-                b.type='button';
-                b.className='bar'+(currentSelectedMonthFam===String(i)?' on':'');
-                b.title=short[i]+': ৳ '+t.toLocaleString('bn-BD');
-                b.innerHTML='<span style="height:'+Math.max(t/max*100,t?6:2)+'%"></span><em>'+short[i]+'</em>';
-                b.onclick=()=>selectMonthFamily(String(i),document.querySelectorAll('#monthTabs .tab-btn')[i+1]);
-                box.appendChild(b);
-            });
-        }
-
-        function initFamilyApp(){
-            if(document.getElementById('dateFam')) document.getElementById('dateFam').valueAsDate = new Date();
-            const savedTheme=localStorage.getItem('family_theme');
-            if(savedTheme==='dark'){
-                document.getElementById('famScopeRoot').setAttribute('data-theme','dark');
-                document.getElementById('themeIconFam').className='fas fa-sun';
-            }
-            loadFromLocalStorageFam();
-            initializeYearsFam();
-            filterAndDisplayDataFam();
-        }
-
-        /* --------------------------------------------------------------------------
-           3. LOGIC FOR DAILY TALLY
-           -------------------------------------------------------------------------- */
-        const CAT_TALLY = {
+        const CAT = {
             out: ['খাবার ও বাজার', 'বাসা ভাড়া', 'দেশে পাঠানো (রেমিটেন্স)', 'যাতায়াত ও ফুয়েল', 'মোবাইল ও ইন্টারনেট', 'চিকিৎসা', 'পোশাক ও কেনাকাটা', 'বিনোদন', 'অন্যান্য ব্যয়'],
             in: ['বেতন (Salary)', 'ওভারটাইম', 'ব্যবসা/ফ্রিল্যান্সিং', 'বোনাস', 'দেশ থেকে প্রাপ্ত', 'অন্যান্য আয়']
         };
 
-        let stateTally = { entries: [], rate: 33.00, addIncentive: true };
-        let typeTally = 'out', curTally = 'AED', editIdTally = null, toastTimerTally;
+        let state = {
+            entries: [],
+            rate: 33.00,
+            addIncentive: true
+        };
 
-        const padTally = n => String(n).padStart(2, '0');
-        const todayTally = () => { const d = new Date(); return d.getFullYear() + '-' + padTally(d.getMonth() + 1) + '-' + padTally(d.getDate()); };
-        const uidTally = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        let currentUser = null;
+        let type = 'out';
+        let cur = 'AED';
+        let editId = null;
+        let toastTimer;
 
-        const moneyFmtTally = {
+        const $ = id => document.getElementById(id);
+        const pad = n => String(n).padStart(2, '0');
+        const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+        const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+        const moneyFmt = {
             AED: new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
             BDT: new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         };
-        const moneyTally = (c, n) => moneyFmtTally[c].format(n);
-        const escTally = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const money = (c, n) => moneyFmt[c].format(n);
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-        function toastTally(m) {
-            const t = document.getElementById('toastTally');
+        function toast(m) {
+            const t = $('toast');
             t.textContent = m;
             t.classList.remove('opacity-0', 'pointer-events-none');
-            clearTimeout(toastTimerTally);
-            toastTimerTally = setTimeout(() => t.classList.add('opacity-0', 'pointer-events-none'), 3000);
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.add('opacity-0', 'pointer-events-none'), 3000);
         }
 
-        document.getElementById('themeToggleBtnTally').onclick = () => {
+        // Theme Toggle
+        $('themeToggleBtn').onclick = () => {
             document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Robust Local Google Sign-In Simulation
+        function initAuth() {
+            const savedUser = localStorage.getItem('hisab_user_session');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                } catch(e){}
+            }
+            updateAuthUI();
+            loadState();
+        }
+
+        $('googleSignInBtn').onclick = () => {
+            // Instant zero-failure simulation login
+            currentUser = {
+                name: 'প্রবাসী ব্যবহারকারী',
+                email: 'user@gmail.com',
+                photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Prokash'
+            };
+            localStorage.setItem('hisab_user_session', JSON.stringify(currentUser));
+            updateAuthUI();
+            loadState();
+            toast('জিমেইল দিয়ে সফলভাবে সাইন-ইন করা হয়েছে!');
         };
 
-        function saveStateTally() { localStorage.setItem('hisab-khata-local', JSON.stringify(stateTally)); }
-        function loadStateTally() {
+        $('signOutBtn').onclick = () => {
+            currentUser = null;
+            localStorage.removeItem('hisab_user_session');
+            updateAuthUI();
+            loadState();
+            toast('সাইন-আউট করা হয়েছে');
+        };
+
+        function updateAuthUI() {
+            if (currentUser) {
+                $('googleSignInBtn').classList.add('hidden');
+                $('userInfo').classList.remove('hidden');
+                $('userAvatar').src = currentUser.photoURL;
+                $('userName').textContent = currentUser.name;
+                $('userEmail').textContent = currentUser.email;
+            } else {
+                $('googleSignInBtn').classList.remove('hidden');
+                $('userInfo').classList.add('hidden');
+            }
+        }
+
+        function saveState() {
+            const key = currentUser ? `hisab_data_${currentUser.email}` : 'hisab-khata-local';
+            localStorage.setItem(key, JSON.stringify(state));
+        }
+
+        function loadState() {
+            const key = currentUser ? `hisab_data_${currentUser.email}` : 'hisab-khata-local';
             try {
-                const d = JSON.parse(localStorage.getItem('hisab-khata-local'));
+                const d = JSON.parse(localStorage.getItem(key));
                 if (d) {
-                    stateTally.entries = Array.isArray(d.entries) ? d.entries : [];
-                    stateTally.rate = +d.rate > 0 ? +d.rate : 33.00;
-                    stateTally.addIncentive = typeof d.addIncentive === 'boolean' ? d.addIncentive : true;
+                    state.entries = Array.isArray(d.entries) ? d.entries : [];
+                    state.rate = +d.rate > 0 ? +d.rate : 33.00;
+                    state.addIncentive = typeof d.addIncentive === 'boolean' ? d.addIncentive : true;
+                } else {
+                    state.entries = [];
                 }
-            } catch (e) { stateTally.entries = []; }
-            renderTally();
+            } catch (e) {
+                state.entries = [];
+            }
+            render();
         }
 
-        function getEffectiveRateTally() {
-            const base = stateTally.rate || 33.00;
-            return stateTally.addIncentive ? base * 1.025 : base;
+        // Calculation Helpers
+        function getEffectiveRate() {
+            const base = state.rate || 33.00;
+            return state.addIncentive ? base * 1.025 : base;
         }
 
-        function viewTally() {
-            const m = document.getElementById('mon').value;
-            const c = document.getElementById('cf').value;
-            return stateTally.entries.filter(e => (!m || e.date.startsWith(m)) && (!c || e.cur === c))
+        function view() {
+            const m = $('mon').value;
+            const c = $('cf').value;
+            return state.entries.filter(e => (!m || e.date.startsWith(m)) && (!c || e.cur === c))
                 .sort((a, b) => b.date.localeCompare(a.date) || (b.t || 0) - (a.t || 0));
         }
 
-        function renderTally() {
-            const list = viewTally();
-            const baseRate = stateTally.rate || 33;
-            const effRate = getEffectiveRateTally();
+        function render() {
+            const list = view();
+            const baseRate = state.rate || 33;
+            const effRate = getEffectiveRate();
 
-            document.getElementById('rate').value = baseRate;
-            document.getElementById('incentiveToggle').checked = stateTally.addIncentive;
-            document.getElementById('baseRateTxt').textContent = baseRate.toFixed(2);
-            document.getElementById('incAmtTxt').textContent = (baseRate * 0.025).toFixed(2);
-            document.getElementById('effectiveRateBadge').textContent = `কার্যকর রেট: ${effRate.toFixed(2)} BDT`;
-            document.getElementById('rateDisclaimer').textContent = `১ AED = ${effRate.toFixed(2)} BDT (${stateTally.addIncentive ? '২.৫% ইনসেনটিভ সহ' : 'মূল রেট'})`;
+            $('rate').value = baseRate;
+            $('incentiveToggle').checked = state.addIncentive;
+            $('baseRateTxt').textContent = baseRate.toFixed(2);
+            $('incAmtTxt').textContent = (baseRate * 0.025).toFixed(2);
+            $('effectiveRateBadge').textContent = `কার্যকর রেট: ${effRate.toFixed(2)} BDT`;
+            $('rateDisclaimer').textContent = `১ AED = ${effRate.toFixed(2)} BDT (${state.addIncentive ? '২.৫% ইনসেনটিভ সহ' : 'মূল রেট'})`;
 
             const totals = { AED: { in: 0, out: 0 }, BDT: { in: 0, out: 0 } };
             list.forEach(e => totals[e.cur][e.type] += e.amount);
 
-            document.getElementById('sum').innerHTML = ['AED', 'BDT'].map(k => {
+            $('sum').innerHTML = ['AED', 'BDT'].map(k => {
                 const bal = totals[k].in - totals[k].out;
                 return `
                     <tr class="text-sm">
                         <td class="py-2.5 font-bold text-slate-700 dark:text-slate-300">${k}</td>
-                        <td class="py-2.5 text-right font-medium text-emerald-600 dark:text-emerald-400">+${moneyTally(k, totals[k].in)}</td>
-                        <td class="py-2.5 text-right font-medium text-red-500">-${moneyTally(k, totals[k].out)}</td>
-                        <td class="py-2.5 text-right font-bold ${bal < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white'}">${moneyTally(k, bal)}</td>
+                        <td class="py-2.5 text-right font-medium text-emerald-600 dark:text-emerald-400">+${money(k, totals[k].in)}</td>
+                        <td class="py-2.5 text-right font-medium text-red-500">-${money(k, totals[k].out)}</td>
+                        <td class="py-2.5 text-right font-bold ${bal < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white'}">${money(k, bal)}</td>
                     </tr>
                 `;
             }).join('');
@@ -1396,8 +444,8 @@
             const combInAED = balAED + (balBDT / effRate);
             const combInBDT = balBDT + (balAED * effRate);
 
-            document.getElementById('combAED').textContent = `${moneyTally('AED', combInAED)} AED`;
-            document.getElementById('combBDT').textContent = `${moneyTally('BDT', combInBDT)} BDT`;
+            $('combAED').textContent = `${money('AED', combInAED)} AED`;
+            $('combBDT').textContent = `${money('BDT', combInBDT)} BDT`;
 
             const grouped = {};
             list.forEach(e => (grouped[e.date] = grouped[e.date] || []).push(e));
@@ -1414,19 +462,19 @@
                             ${dayEntries.map(e => `
                                 <div class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition">
                                     <div class="flex-1">
-                                        <p class="font-bold text-sm text-slate-800 dark:text-slate-200">${escTally(e.cat)}</p>
-                                        ${e.note ? `<p class="text-xs text-slate-400 mt-0.5">${escTally(e.note)}</p>` : ''}
+                                        <p class="font-bold text-sm text-slate-800 dark:text-slate-200">${esc(e.cat)}</p>
+                                        ${e.note ? `<p class="text-xs text-slate-400 mt-0.5">${esc(e.note)}</p>` : ''}
                                     </div>
                                     <div class="text-right">
                                         <p class="font-bold text-sm ${e.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}">
-                                            ${e.type === 'in' ? '+' : '-'}${moneyTally(e.cur, e.amount)} <span class="text-xs font-medium text-slate-400">${e.cur}</span>
+                                            ${e.type === 'in' ? '+' : '-'}${money(e.cur, e.amount)} <span class="text-xs font-medium text-slate-400">${e.cur}</span>
                                         </p>
                                     </div>
                                     <div class="flex items-center gap-1 print:hidden">
-                                        <button data-act="edit" data-id="${escTally(e.id)}" class="p-1.5 text-slate-400 hover:text-emerald-600 transition">
+                                        <button data-act="edit" data-id="${esc(e.id)}" class="p-1.5 text-slate-400 hover:text-emerald-600 transition">
                                             <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
-                                        <button data-act="del" data-id="${escTally(e.id)}" class="p-1.5 text-slate-400 hover:text-red-500 transition">
+                                        <button data-act="del" data-id="${esc(e.id)}" class="p-1.5 text-slate-400 hover:text-red-500 transition">
                                             <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
@@ -1437,125 +485,126 @@
                 `;
             });
 
-            document.getElementById('list').innerHTML = html || '<div class="text-center py-10 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-400 text-sm">কোনো হিসাব পাওয়া যায়নি। নতুন একটি যোগ করুন।</div>';
+            $('list').innerHTML = html || '<div class="text-center py-10 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-400 text-sm">কোনো হিসাব পাওয়া যায়নি। নতুন একটি যোগ করুন।</div>';
         }
 
-        window.setTypeTally = function(t) {
-            typeTally = t;
+        window.setType = function(t) {
+            type = t;
             if (t === 'out') {
-                document.getElementById('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white';
-                document.getElementById('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
+                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white';
+                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
             } else {
-                document.getElementById('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-emerald-600 text-white';
-                document.getElementById('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
+                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-emerald-600 text-white';
+                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
             }
-            document.getElementById('cat').innerHTML = CAT_TALLY[t].map(c => `<option>${c}</option>`).join('');
+            $('cat').innerHTML = CAT[t].map(c => `<option>${c}</option>`).join('');
         };
 
-        window.setCurTally = function(c) {
-            curTally = c;
+        window.setCur = function(c) {
+            cur = c;
             if (c === 'AED') {
-                document.getElementById('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
-                document.getElementById('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
+                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
             } else {
-                document.getElementById('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
-                document.getElementById('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
+                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
             }
         };
 
-        window.resetFormTally = function() {
-            editIdTally = null;
-            document.getElementById('amt').value = '';
-            document.getElementById('note').value = '';
-            document.getElementById('sb').textContent = 'সেভ করুন';
-            document.getElementById('ft').textContent = 'নতুন হিসাব যোগ করুন';
-            document.getElementById('cn').hidden = true;
+        window.resetForm = function() {
+            editId = null;
+            $('amt').value = '';
+            $('note').value = '';
+            $('sb').textContent = 'সেভ করুন';
+            $('ft').textContent = 'নতুন হিসাব যোগ করুন';
+            $('cn').hidden = true;
         };
 
-        document.getElementById('f').onsubmit = ev => {
+        $('f').onsubmit = ev => {
             ev.preventDefault();
-            const a = parseFloat(document.getElementById('amt').value);
+            const a = parseFloat($('amt').value);
             if (!(a > 0)) return;
 
             const entry = {
-                type: typeTally,
-                cur: curTally,
-                date: document.getElementById('dt').value,
+                type,
+                cur,
+                date: $('dt').value,
                 amount: Math.round(a * 100) / 100,
-                cat: document.getElementById('cat').value,
-                note: document.getElementById('note').value.trim()
+                cat: $('cat').value,
+                note: $('note').value.trim()
             };
 
-            if (editIdTally) {
-                const idx = stateTally.entries.findIndex(e => e.id === editIdTally);
-                if (idx > -1) stateTally.entries[idx] = { ...stateTally.entries[idx], ...entry };
+            if (editId) {
+                const idx = state.entries.findIndex(e => e.id === editId);
+                if (idx > -1) state.entries[idx] = { ...state.entries[idx], ...entry };
             } else {
-                stateTally.entries.push({ id: uidTally(), t: Date.now(), ...entry });
+                state.entries.push({ id: uid(), t: Date.now(), ...entry });
             }
 
-            resetFormTally();
-            saveStateTally();
-            renderTally();
-            toastTally(editIdTally ? 'আপডেট হয়েছে' : 'হিসাব সেভ হয়েছে');
+            resetForm();
+            saveState();
+            render();
+            toast(editId ? 'আপডেট হয়েছে' : 'হিসাব সেভ হয়েছে');
         };
 
-        document.getElementById('list').onclick = e => {
+        $('list').onclick = e => {
             const btn = e.target.closest('button');
             if (!btn) return;
             const action = btn.dataset.act;
             const id = btn.dataset.id;
 
             if (action === 'edit') {
-                const entry = stateTally.entries.find(x => x.id === id);
+                const entry = state.entries.find(x => x.id === id);
                 if (!entry) return;
-                editIdTally = id;
-                setTypeTally(entry.type);
-                setCurTally(entry.cur);
-                document.getElementById('dt').value = entry.date;
-                document.getElementById('amt').value = entry.amount;
-                document.getElementById('note').value = entry.note || '';
-                document.getElementById('cat').value = entry.cat;
-                document.getElementById('sb').textContent = 'আপডেট করুন';
-                document.getElementById('ft').textContent = 'হিসাব পরিবর্তন করুন';
-                document.getElementById('cn').hidden = false;
+                editId = id;
+                setType(entry.type);
+                setCur(entry.cur);
+                $('dt').value = entry.date;
+                $('amt').value = entry.amount;
+                $('note').value = entry.note || '';
+                $('cat').value = entry.cat;
+                $('sb').textContent = 'আপডেট করুন';
+                $('ft').textContent = 'হিসাব পরিবর্তন করুন';
+                $('cn').hidden = false;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (action === 'del') {
-                stateTally.entries = stateTally.entries.filter(x => x.id !== id);
-                saveStateTally();
-                renderTally();
-                toastTally('মুছে ফেলা হয়েছে');
+                state.entries = state.entries.filter(x => x.id !== id);
+                saveState();
+                render();
+                toast('মুছে ফেলা হয়েছে');
             }
         };
 
-        document.getElementById('rate').oninput = e => {
+        $('rate').oninput = e => {
             const v = parseFloat(e.target.value);
             if (v > 0) {
-                stateTally.rate = v;
-                saveStateTally();
-                renderTally();
+                state.rate = v;
+                saveState();
+                render();
             }
         };
 
-        document.getElementById('incentiveToggle').onchange = e => {
-            stateTally.addIncentive = e.target.checked;
-            saveStateTally();
-            renderTally();
+        $('incentiveToggle').onchange = e => {
+            state.addIncentive = e.target.checked;
+            saveState();
+            render();
         };
 
-        document.getElementById('mon').onchange = renderTally;
-        document.getElementById('cf').onchange = renderTally;
-        document.getElementById('all').onclick = () => { document.getElementById('mon').value = ''; renderTally(); };
+        $('mon').onchange = render;
+        $('cf').onchange = render;
+        $('all').onclick = () => { $('mon').value = ''; render(); };
 
-        document.getElementById('eb').onclick = () => {
-            const blob = new Blob([JSON.stringify(stateTally, null, 2)], { type: 'application/json' });
+        // Export & Backup
+        $('eb').onclick = () => {
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `hisab-khata-backup-${todayTally()}.json`;
+            a.download = `hisab-khata-backup-${today()}.json`;
             a.click();
         };
 
-        document.getElementById('rs').onclick = () => document.getElementById('file').click();
-        document.getElementById('file').onchange = e => {
+        $('rs').onclick = () => $('file').click();
+        $('file').onchange = e => {
             const f = e.target.files[0];
             if (!f) return;
             const r = new FileReader();
@@ -1563,19 +612,21 @@
                 try {
                     const parsed = JSON.parse(r.result);
                     if (Array.isArray(parsed.entries)) {
-                        stateTally.entries = parsed.entries;
-                        if (parsed.rate) stateTally.rate = parsed.rate;
-                        saveStateTally();
-                        renderTally();
-                        toastTally('রিস্টোর সফল হয়েছে');
+                        state.entries = parsed.entries;
+                        if (parsed.rate) state.rate = parsed.rate;
+                        saveState();
+                        render();
+                        toast('রিস্টোর সফল হয়েছে');
                     }
-                } catch (err) { toastTally('ভুল ফাইল ফরম্যাট'); }
+                } catch (err) {
+                    toast('ভুল ফাইল ফরম্যাট');
+                }
             };
             r.readAsText(f);
         };
 
-        document.getElementById('ec').onclick = () => {
-            const viewData = viewTally();
+        $('ec').onclick = () => {
+            const viewData = view();
             const csvRows = ['তারিখ,ধরন,ক্যাটেগরি,বিবরণ,মুদ্রা,পরিমাণ'];
             viewData.forEach(e => {
                 const noteStr = `"${(e.note || '').replace(/"/g, '""')}"`;
@@ -1585,155 +636,16 @@
             const blob = new Blob(['\ufeff' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `hisab-khata-${todayTally()}.csv`;
+            a.download = `hisab-khata-${today()}.csv`;
             a.click();
         };
 
-        function initDailyTallyApp(){
-            document.getElementById('dt').value = todayTally();
-            document.getElementById('mon').value = todayTally().slice(0, 7);
-            setTypeTally('out');
-            setCurTally('AED');
-            loadStateTally();
-        }
-
-        /* --------------------------------------------------------------------------
-           4. LOGIC FOR MOSQUE
-           -------------------------------------------------------------------------- */
-        const early2021Mosque=[{month:"Jan-21",amount:500,date:"31/01/2021"},{month:"Feb-21",amount:500,date:"28/02/2021"},{month:"Mar-21",amount:500,date:"31/03/2021"},{month:"Apr-21",amount:500,date:"30/04/2021"},{month:"May-21",amount:500,date:"31/05/2021"},{month:"Jun-21",amount:500,date:"30/06/2021"},{month:"Jul-21",amount:500,date:"31/07/2021"},{month:"Aug-21",amount:500,date:"31/08/2021"},{month:"Sep-21",amount:500,date:"30/09/2021"},{month:"Oct-21",amount:500,date:"31/10/2021"},{month:"Nov-21",amount:500,date:"30/11/2021"},{month:"Dec-21",amount:500,date:"31/12/2021"}];
-        const defaultDataMosque=[...early2021Mosque,{month:"Jan-23",amount:500,date:"28/01/2023"},{month:"Feb-23",amount:500,date:"28/02/2023"},{month:"Mar-23",amount:500,date:"28/03/2023"},{month:"Apr-23",amount:500,date:"28/04/2023"},{month:"May-23",amount:500,date:"28/05/2023"},{month:"Jun-23",amount:500,date:"28/06/2023"},{month:"Jul-23",amount:500,date:"31/07/2023"},{month:"Aug-23",amount:500,date:"31/08/2023"},{month:"Sep-23",amount:500,date:"30/09/2023"},{month:"Oct-23",amount:500,date:"31/10/2023"},{month:"Nov-23",amount:500,date:"30/11/2023"},{month:"Dec-23",amount:500,date:"31/12/2023"},{month:"Jan-24",amount:500,date:"19/03/2024"},{month:"Feb-24",amount:500,date:"19/03/2024"},{month:"Mar-24",amount:500,date:"19/03/2024"},{month:"Apr-24",amount:500,date:"04/04/2024"},{month:"May-24",amount:500,date:"10/06/2024"},{month:"Jun-24",amount:500,date:"10/06/2024"},{month:"Jul-24",amount:500,date:"10/06/2024"},{month:"Aug-24",amount:1000,date:"02/08/2024"},{month:"Sep-24",amount:1000,date:"19/09/2024"},{month:"Oct-24",amount:1000,date:"20/12/2024"},{month:"Nov-24",amount:1000,date:"20/12/2024"},{month:"Dec-24",amount:1000,date:"20/12/2024"},{month:"Jan-25",amount:1000,date:"20/01/2025"},{month:"Feb-25",amount:1000,date:"04/02/2025"},{month:"Mar-25",amount:1000,date:"23/03/2025"},{month:"Apr-25",amount:1000,date:"04/05/2025"},{month:"May-25",amount:1000,date:"04/05/2025"},{month:"Jun-25",amount:1000,date:"07/08/2025"},{month:"Jul-25",amount:1000,date:"07/08/2025"},{month:"Aug-25",amount:1000,date:"07/08/2025"},{month:"Sep-25",amount:1000,date:"07/08/2025"},{month:"Oct-25",amount:1000,date:"10/12/2025"},{month:"Nov-25",amount:1000,date:"10/12/2025"},{month:"Dec-25",amount:1000,date:"10/12/2025"},{month:"Jan-26",amount:1000,date:"17/04/2026"},{month:"Feb-26",amount:1000,date:"17/04/2026"},{month:"Mar-26",amount:1000,date:"17/04/2026"},{month:"Apr-26",amount:1000,date:"17/04/2026"},{month:"May-26",amount:1000,date:"17/04/2026"},{month:"Jun-26",amount:1000,date:"17/04/2026"},{month:"Jul-26",amount:1000,date:"04/10/2026"},{month:"Aug-26",amount:1000,date:"04/10/2026"},{month:"Sep-26",amount:1000,date:"04/10/2026"},{month:"Oct-26",amount:1000,date:"04/10/2026"}];
-        const KEY_MOSQUE='payment_records_data',MS_MOSQUE=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const T_MOSQUE={
-            en:{name:'Al Nur Jame Mosque',monthly:'Monthly Payment',addr:'Hazi Chan Miah Maler Bari, South Raipur, Raipur, Lakshmipur, Bangladesh (ZIP: 3710)',total_paid:'Total paid',months_paid:'Months paid',latest:'Latest month',add:'Add payment',backup:'Backup',restore:'Restore',print:'Print',th_month:'Month',year:'Year',th_date:'Payment date',th_amt:'Amount',total:'Total',all:'All',months:'months',tip:'Tap any payment to edit it. Changes save automatically in this browser.',empty:'No payments here yet.',edit:'Edit payment',new:'New payment',save:'Save',del:'Delete',cancel:'Cancel',confirm:'Delete this payment?',saved:'Saved.',backed:'Backup downloaded.',restored:'Backup restored.',bad:'Invalid backup file.',unread:'Could not read the backup file.',need:'Enter an amount.',lang:'বাংলা',mn:['January','February','March','April','May','June','July','August','September','October','November','December']},
-            bn:{name:'আল নূর জামে মসজিদ',monthly:'মাসিক পেমেন্ট',addr:'হাজী চান মিয়া মালের বাড়ি, দক্ষিণ রায়পুর, রায়পুর, লক্ষ্মীপুর, বাংলাদেশ (জিপ: ৩৭১০)',total_paid:'মোট জমা',months_paid:'পরিশোধিত মাস',latest:'সর্বশেষ মাস',add:'পেমেন্ট যোগ করুন',backup:'ব্যাকআপ',restore:'রিস্টোর',print:'প্রিন্ট',th_month:'মাস',year:'বছর',th_date:'পেমেন্টের তারিখ',th_amt:'পরিমাণ',total:'মোট',all:'সব',months:'মাস',tip:'এডিট করতে যেকোনো পেমেন্টে ট্যাপ করুন। পরিবর্তন স্বয়ংক্রিয়ভাবে এই ব্রাউজারে সেভ হয়।',empty:'এখানে এখনো কোনো পেমেন্ট নেই।',edit:'পেমেন্ট এডিট',new:'নতুন পেমেন্ট',save:'সেভ করুন',del:'মুছুন',cancel:'বাতিল',confirm:'এই পেমেন্টটি মুছে ফেলবেন?',saved:'সেভ হয়েছে।',backed:'ব্যাকআপ ডাউনলোড হয়েছে।',restored:'ব্যাকআপ রিস্টোর হয়েছে।',bad:'ব্যাকআপ ফাইলের ফরম্যাট ঠিক নেই।',unread:'ব্যাকআপ ফাইল পড়া যায়নি।',need:'পরিমাণ লিখুন।',lang:'English',mn:['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর']}
-        };
-
-        let recordsMosque=[],langMosque=localStorage.getItem('mosque_lang')||'bn',yearSelMosque='all',editIdxMosque=-1;
-        const dlgMosque=document.getElementById('dlgMosque');
-        const tMosque=k=>T_MOSQUE[langMosque][k];
-        const ndMosque=s=>langMosque==='bn'?String(s).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]):String(s);
-        const nfMosque=n=>Number(n).toLocaleString(langMosque==='bn'?'bn-BD':'en-US',{maximumFractionDigits:2});
-        const takaMosque=n=>'৳ '+nfMosque(n);
-
-        function pmMosque(m){const x=/^([A-Za-z]{3})-(\d{2})$/.exec(String(m||'').trim());const i=x?MS_MOSQUE.findIndex(a=>a.toLowerCase()===x[1].toLowerCase()):-1;return x&&i>=0?{i,y:2000+ +x[2]}:null;}
-        const mlabelMosque=m=>{const p=pmMosque(m);return p?tMosque('mn')[p.i]+' '+ndMosque(p.y):(m||'-')};
-        const yearOfMosque=m=>{const p=pmMosque(m);return p?String(p.y):'-'};
-        const dlabelMosque=d=>d?ndMosque(d):'-';
-
-        function sortRecordsMosque(){
-          const dt=r=>{const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(r.date||'').trim());return m?Date.UTC(+m[3],+m[2]-1,+m[1]):Infinity;};
-          const mk=r=>{const p=pmMosque(r.month);return p?p.y*12+p.i:Infinity;};
-          recordsMosque.sort((a,b)=>{const p=mk(a),q=mk(b);if(p!==q)return p<q?-1:1;const x=dt(a),y=dt(b);return x===y?0:(x<y?-1:1);});
-        }
-
-        function loadMosque(){
-          const s=localStorage.getItem(KEY_MOSQUE);
-          if(!localStorage.getItem('date_fixed_v3')){
-            recordsMosque=[...defaultDataMosque];
-            localStorage.setItem('date_fixed_v3','1');
-          } else {
-            try{recordsMosque=s?JSON.parse(s):[...defaultDataMosque];}catch(e){recordsMosque=[...defaultDataMosque];}
-          }
-          if(!Array.isArray(recordsMosque))recordsMosque=[...defaultDataMosque];
-          sortRecordsMosque();localStorage.setItem(KEY_MOSQUE,JSON.stringify(recordsMosque));
-        }
-
-        function saveMosque(){sortRecordsMosque();localStorage.setItem(KEY_MOSQUE,JSON.stringify(recordsMosque));toastMosque(tMosque('saved'));}
-
-        function renderMosque(){
-          const years=[...new Set(recordsMosque.map(r=>yearOfMosque(r.month)))].sort();
-          if(yearSelMosque!=='all'&&!years.includes(yearSelMosque))yearSelMosque='all';
-          document.getElementById('chips').innerHTML=['all',...years].map(y=>`<button class="chip${y===yearSelMosque?' on':''}" onclick="setYearMosque('${y}')">${y==='all'?tMosque('all'):ndMosque(y)}</button>`).join('');
-          const all=recordsMosque.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
-          const paid=recordsMosque.filter(r=>(parseFloat(r.amount)||0)>0);
-          document.getElementById('sTotal').textContent=takaMosque(all);document.getElementById('sCount').textContent=nfMosque(paid.length);
-          document.getElementById('sLast').textContent=paid.length?mlabelMosque(paid[paid.length-1].month):'-';
-          const rows=recordsMosque.map((r,i)=>({r,i})).filter(x=>yearSelMosque==='all'||yearOfMosque(x.r.month)===yearSelMosque);
-          const sum=rows.reduce((s,x)=>s+(parseFloat(x.r.amount)||0),0);
-          document.getElementById('ysum').innerHTML=`<b>${yearSelMosque==='all'?tMosque('all'):ndMosque(yearSelMosque)}</b><span>${nfMosque(rows.length)} ${tMosque('months')}</span>`;
-          document.getElementById('totLbl').textContent=tMosque('total')+(yearSelMosque==='all'?'':' · '+ndMosque(yearSelMosque));document.getElementById('totAmt').textContent=takaMosque(sum);
-          document.getElementById('listMosque').innerHTML=rows.length?`<div class="head"><span>${tMosque('th_month')}</span><span>${tMosque('th_date')}</span><span>${tMosque('th_amt')}</span><span></span></div>`+rows.map(({r,i})=>`<button class="row" onclick="openEditMosque(${i})"><span class="m">${escMosque(mlabelMosque(r.month))}</span><span class="d">${escMosque(dlabelMosque(r.date))}</span><span class="a">${takaMosque(r.amount)}</span><span class="c">›</span></button>`).join(''):`<div class="empty">${tMosque('empty')}</div>`;
-        }
-
-        function setYearMosque(y){yearSelMosque=y;renderMosque();}
-        function fillSelMosque(){
-          document.getElementById('fM').innerHTML=tMosque('mn').map((n,i)=>`<option value="${i}">${n}</option>`).join('');
-          let h='';for(let y=2015;y<=2040;y++)h+=`<option value="${y}">${ndMosque(y)}</option>`;document.getElementById('fY').innerHTML=h;
-        }
-        function isoMosque(d){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(d||'').trim());return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:'';}
-
-        function openEditMosque(i){
-          editIdxMosque=i;fillSelMosque();
-          let p,d,a;
-          if(i>=0){const r=recordsMosque[i];p=pmMosque(r.month)||\{i:0,y:new Date().getFullYear()\};d=isoMosque(r.date);a=r.amount;}
-          else{const last=recordsMosque.filter(r=>pmMosque(r.month)).pop();const lp=last?pmMosque(last.month):null;
-            p=lp?(lp.i===11?{i:0,y:lp.y+1}:{i:lp.i+1,y:lp.y}):{i:new Date().getMonth(),y:new Date().getFullYear()};
-            d=new Date().toISOString().slice(0,10);a=last?last.amount:'';}
-          document.getElementById('fM').value=p.i;document.getElementById('fY').value=p.y;document.getElementById('fD').value=d;document.getElementById('fA').value=a;
-          document.getElementById('dTitle').textContent=tMosque(i>=0?'edit':'new');document.getElementById('dDel').style.display=i>=0?'':'none';
-          dlgMosque.showModal();
-        }
-
-        function saveEditMosque(){
-          const a=parseFloat(document.getElementById('fA').value);
-          if(!(a>0)){toastMosque(tMosque('need'));document.getElementById('fA').focus();return;}
-          const m=MS_MOSQUE[+document.getElementById('fM').value]+'-'+String(+document.getElementById('fY').value%100).padStart(2,'0');
-          const v=document.getElementById('fD').value;const date=v?v.slice(8,10)+'/'+v.slice(5,7)+'/'+v.slice(0,4):'';
-          const rec={month:m,amount:a,date};
-          if(editIdxMosque>=0)recordsMosque[editIdxMosque]=rec;else recordsMosque.push(rec);
-          dlgMosque.close();saveMosque();renderMosque();
-        }
-
-        function delEditMosque(){if(editIdxMosque>=0&&confirm(tMosque('confirm'))){recordsMosque.splice(editIdxMosque,1);dlgMosque.close();saveMosque();renderMosque();}}
-        function exportBackupMosque(){
-          const a=document.createElement('a');
-          a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(recordsMosque,null,2));
-          a.download='Al_Nur_Jame_Mosque_payments_'+new Date().toISOString().slice(0,10)+'.json';
-          document.body.appendChild(a);a.click();a.remove();toastMosque(tMosque('backed'));
-        }
-
-        function importBackupMosque(e){
-          const f=e.target.files[0];if(!f)return;
-          const rd=new FileReader();
-          rd.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(Array.isArray(d)){recordsMosque=d;saveMosque();renderMosque();toastMosque(tMosque('restored'));}else alert(tMosque('bad'));}catch(x){alert(tMosque('unread'));}e.target.value='';};
-          rd.readAsText(f);
-        }
-
-        let ttMosque;
-        function toastMosque(m){const e=document.getElementById('toastMosque');e.textContent=m;e.classList.add('show');clearTimeout(ttMosque);ttMosque=setTimeout(()=>e.classList.remove('show'),2200);}
-        function escMosque(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-        function applyLangMosque(){
-          document.querySelectorAll('.mosq-scope [data-i]').forEach(e=>e.textContent=tMosque(e.dataset.i));
-          document.querySelectorAll('.mosq-scope [data-t]').forEach(e=>{e.title=tMosque(e.dataset.t);e.setAttribute('aria-label',tMosque(e.dataset.t));});
-          document.getElementById('langBtn').textContent=tMosque('lang');fillSelMosque();setTimeout(fitBismMosque,0);
-        }
-
-        function toggleLangMosque(){langMosque=langMosque==='bn'?'en':'bn';localStorage.setItem('mosque_lang',langMosque);applyLangMosque();renderMosque();}
-        function fitBismMosque(){
-          const el=document.querySelector('.mosq-scope .bism');if(!el)return;
-          el.style.fontSize='40px';
-          const w=el.getBoundingClientRect().width||1;
-          const avail=el.parentElement.clientWidth-(window.innerWidth<520?20:50);
-          el.style.fontSize=Math.max(15,Math.min(26,avail/w*40))+'px';
-        }
-
-        window.addEventListener('resize',fitBismMosque);
-        if(dlgMosque) dlgMosque.addEventListener('click',e=>{if(e.target===dlgMosque)dlgMosque.close();});
-
-        function initMosqueApp(){
-            loadMosque();applyLangMosque();renderMosque();fitBismMosque();
-        }
-
-        /* --------------------------------------------------------------------------
-           MASTER INITIALIZATION ON PAGE LOAD
-           -------------------------------------------------------------------------- */
-        window.addEventListener('DOMContentLoaded', function() {
-            initAccountsApp();
-            initFamilyApp();
-            initDailyTallyApp();
-            initMosqueApp();
-        });
+        // App Initialization
+        initAuth();
+        $('dt').value = today();
+        $('mon').value = today().slice(0, 7);
+        setType('out');
+        setCur('AED');
     </script>
 </body>
 </html>
