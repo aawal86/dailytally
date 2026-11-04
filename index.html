@@ -1,263 +1,683 @@
+```html
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" class="h-full">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>দৈনিক হিসাব খাতা</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#eef2ef;--sf:#fff;--ink:#14231c;--mut:#5b6b63;--ln:#d2dbd6;--g:#006a4e;--r:#b3261e;--ac:#006a4e;--on:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--sf:#16251e;--ink:#e6efe9;--mut:#9db0a5;--ln:#2a3d33;--g:#4fd1a1;--r:#ff8a80;--ac:#4fd1a1;--on:#06251a;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1a15;--sf:#16251e;--ink:#e6efe9;--mut:#9db0a5;--ln:#2a3d33;--g:#4fd1a1;--r:#ff8a80;--ac:#4fd1a1;--on:#06251a;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*,*::before,*::after{box-sizing:inherit}
-[hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Hind Siliguri","Noto Sans Bengali","Kalpurush",system-ui,sans-serif}
-main{max-width:720px;margin:0 auto;padding:16px}
-h1{font-size:1.7rem;line-height:1.3;margin:4px 0 2px;font-weight:700}
-h2{font-size:1.05rem;margin:0 0 10px;font-weight:600}
-h3{font-size:.95rem;margin:0;font-weight:600}
-p{margin:0}
-.sub{color:var(--mut);font-size:.9rem}
-.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:14px;margin-top:14px}
-input,select,textarea{font:inherit;color:var(--ink);background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
-textarea{min-height:90px;font-size:.85rem}
-:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-label{display:block;font-size:.85rem;color:var(--mut);margin-bottom:3px}
-.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.s2{grid-column:1/-1}
-.row2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.seg{display:flex;border:1px solid var(--ln);border-radius:8px;overflow:hidden}
-.seg button{flex:1;padding:9px 6px;border:0;background:transparent;color:var(--ink);font:inherit;cursor:pointer}
-.seg button[aria-pressed=true]{background:var(--ac);color:var(--on);font-weight:600}
-.seg button.o[aria-pressed=true]{background:var(--r)}
-.btn{font:inherit;padding:9px 14px;border-radius:8px;border:1px solid var(--ln);background:var(--sf);color:var(--ink);cursor:pointer}
-.btn.p{background:var(--ac);color:var(--on);border-color:var(--ac);font-weight:600}
-.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.sc{overflow-x:auto}
-.led{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
-.led th,.led td{padding:10px 6px;text-align:right;white-space:nowrap}
-.led thead th{font-weight:500;color:var(--mut);border-bottom:1px solid var(--ln)}
-.led tbody th{text-align:left}
-.led td.bal{font-weight:700;border-bottom:3px double var(--ink)}
-.in{color:var(--g)}.out{color:var(--r)}
-.cb{font-size:.72rem;font-weight:600;padding:1px 6px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
-.cb.BDT{color:var(--g)}
-#comb{margin-top:8px;font-size:.9rem;color:var(--mut)}
-.day{margin-top:14px;border-top:2px solid var(--ink);padding-top:6px}
-.day header{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
-.dn{display:flex;gap:10px;font-size:.85rem;font-variant-numeric:tabular-nums}
-.row{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}
-.rm{flex:1 1 140px;min-width:0}
-.rm small{display:block;color:var(--mut);overflow-wrap:anywhere}
-.ra{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
-.rb button{font:inherit;font-size:.8rem;border:1px solid var(--ln);background:transparent;color:var(--mut);border-radius:6px;padding:2px 8px;cursor:pointer;margin-left:4px}
-.rb button.dg{color:var(--r);border-color:var(--r)}
-.empty{color:var(--mut);padding:18px 0;text-align:center}
-.note{font-size:.85rem;color:var(--mut);margin-top:10px}
-details{margin-top:10px}
-summary{cursor:pointer;color:var(--mut);font-size:.9rem}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90%;text-align:center;z-index:5}
-#toast.on{opacity:1}
-.pt{display:none}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media print{
-:root{--bg:#fff!important;--sf:#fff!important;--ink:#000!important;--mut:#333!important;--ln:#999!important;--g:#006a4e!important;--r:#b3261e!important}
-.noprint{display:none!important}.pt{display:block;margin-bottom:8px}
-main{max-width:none;padding:0}.card{border:0;padding:0}.day{break-inside:avoid}#toast{display:none}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>দৈনিক হিসাব খাতা - প্রিমিয়াম সংস্করণ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Hind Siliguri', sans-serif; }
+    </style>
 </head>
-<body>
-<main>
-<header>
-  <h1>দৈনিক হিসাব খাতা</h1>
-  <p class="sub noprint">আরব আমিরাত দিরহাম (AED) ও বাংলাদেশি টাকা (BDT)</p>
-  <div class="pt"><p id="pp"></p></div>
-</header>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
 
-<section class="card noprint" aria-label="ফিল্টার">
-  <div class="g">
-    <div><label for="mon">মাস</label><input type="month" id="mon"></div>
-    <div><label for="cf">মুদ্রা</label><select id="cf"><option value="">সব মুদ্রা</option><option>AED</option><option>BDT</option></select></div>
-    <button type="button" class="btn s2" id="all">সব সময়ের হিসাব দেখুন</button>
-  </div>
-</section>
+    <!-- Header Navigation -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm print:hidden">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight text-slate-900 dark:text-white">দৈনিক হিসাব খাতা</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">AED (আমিরাত) এবং BDT (বাংলাদেশ)</p>
+                </div>
+            </div>
 
-<section class="card" aria-label="সারসংক্ষেপ">
-  <h2>সারসংক্ষেপ</h2>
-  <div class="sc"><table class="led">
-    <thead><tr><th></th><th>আয়</th><th>ব্যয়</th><th>অবশিষ্ট</th></tr></thead>
-    <tbody id="sum"></tbody>
-  </table></div>
-  <p id="comb"></p>
-  <div class="row2 noprint" style="margin-top:10px">
-    <label for="rate" style="margin:0">বিনিময় হার: 1 AED =</label>
-    <input type="number" id="rate" step="0.01" min="0.01" style="width:90px" inputmode="decimal">
-    <span>BDT</span>
-  </div>
-</section>
+            <!-- Header Actions & Auth Status -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggleBtn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
+                    <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="moonIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.03 9.03 0 0012 21a9.03 9.03 0 008.354-5.646z"></path></svg>
+                </button>
 
-<section class="card noprint" aria-label="নতুন হিসাব">
-  <h2 id="ft">নতুন হিসাব লিখুন</h2>
-  <form id="f" class="g">
-    <div class="seg s2" role="group" aria-label="ধরন">
-      <button type="button" class="o" data-type="out">ব্যয়</button>
-      <button type="button" data-type="in">আয়</button>
+                <!-- Auth Container -->
+                <div id="authContainer">
+                    <button id="googleSignInBtn" class="flex items-center gap-2 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 text-sm font-medium transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>গুগল দিয়ে সাইন-ইন</span>
+                    </button>
+
+                    <div id="userInfo" class="hidden flex items-center gap-2">
+                        <img id="userAvatar" src="" class="w-8 h-8 rounded-full border border-brand-500" alt="Avatar">
+                        <div class="hidden sm:block text-left text-xs">
+                            <p id="userName" class="font-bold text-slate-800 dark:text-slate-100"></p>
+                            <p id="userEmail" class="text-slate-400"></p>
+                        </div>
+                        <button id="signOutBtn" title="সাইন আউট" class="p-1.5 text-slate-400 hover:text-red-500 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+
+        <!-- Banner for Govt Incentive Info -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-start gap-3">
+                <span class="p-2 bg-emerald-500 text-white rounded-xl text-lg font-bold">2.5%</span>
+                <div>
+                    <h3 class="font-bold text-emerald-800 dark:text-emerald-300">সরকারী প্রণোদনা (Remittance Incentive) হিসাব অন্তর্ভুক্ত</h3>
+                    <p class="text-sm text-emerald-700 dark:text-emerald-400">সংযুক্ত আরব আমিরাত (AED) থেকে বাংলাদেশে পাঠালে সরকারি ২.৫% প্রণোদনা স্বয়ংক্রিয়ভাবে হিসাব করা সম্ভব।</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-700 shadow-sm self-start md:self-auto">
+                <label for="incentiveToggle" class="text-sm font-semibold cursor-pointer">২.৫% প্রণোদনা যোগ করুন</label>
+                <input type="checkbox" id="incentiveToggle" checked class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+            </div>
+        </div>
+
+        <!-- Dashboard Exchange Rate & Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print:hidden">
+            <!-- Filter Card -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+                <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">ফিল্টার করুন</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-slate-400">মাস</label>
+                        <input type="month" id="mon" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400">মুদ্রা</label>
+                        <select id="cf" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="">সব মুদ্রা</option>
+                            <option value="AED">AED</option>
+                            <option value="BDT">BDT</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="all" class="mt-3 text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline text-left">সব সময়ের হিসাব দেখুন</button>
+            </div>
+
+            <!-- Exchange Rate Card -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm md:col-span-2 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400">বিনিময় হার (Exchange Rate)</h3>
+                    <span id="effectiveRateBadge" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full">কার্যকর রেট: --</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-xs text-slate-400">১ AED = কত BDT (মূল রেট)?</label>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="rate" step="0.01" value="33.00" class="w-full text-base font-bold bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <span class="font-bold text-slate-500">BDT</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-500 bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl flex-1 border border-slate-100 dark:border-slate-700">
+                        <p>মূল রেট: <span id="baseRateTxt" class="font-bold">--</span> BDT</p>
+                        <p>প্রণোদনা (+২.৫%): <span id="incAmtTxt" class="font-bold text-emerald-600 dark:text-emerald-400">--</span> BDT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Balance Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Summary Table Card -->
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h2 class="text-lg font-bold mb-3 flex items-center justify-between">
+                    <span>হিসাব সারসংক্ষেপ</span>
+                    <span class="text-xs font-normal text-slate-400" id="summaryPeriod">বর্তমান সময়</span>
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-400">
+                                <th class="pb-2">মুদ্রা</th>
+                                <th class="pb-2 text-right">মোট আয়</th>
+                                <th class="pb-2 text-right">মোট ব্যয়</th>
+                                <th class="pb-2 text-right">অবশিষ্ট</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sum" class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Combined Balance Card -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">একত্রিত নিট ব্যালেন্স</span>
+                    <h3 class="text-xs text-slate-400 mt-1" id="rateDisclaimer">১ AED = -- BDT (ইনসেনটিভসহ)</h3>
+                </div>
+                <div class="my-4 space-y-2">
+                    <div>
+                        <p class="text-xs text-slate-400">আনুমানিক মোট (AED-তে):</p>
+                        <p class="text-3xl font-extrabold text-emerald-400" id="combAED">0.00 AED</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">আনুমানিক মোট (BDT-তে):</p>
+                        <p class="text-xl font-bold text-slate-200" id="combBDT">0.00 BDT</p>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 italic">* প্রণোদনা হিসাব সক্রিয় থাকলে BDT পরিমাণে সরকারি ২.৫% বোনাস যোগ করা থাকবে।</p>
+            </div>
+        </div>
+
+        <!-- Form Section: Add / Edit Entry -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden">
+            <h2 id="ft" class="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                নতুন হিসাব লিখুন
+            </h2>
+            <form id="f" class="space-y-4">
+                <!-- Type Selection -->
+                <div class="flex rounded-xl bg-slate-100 dark:bg-slate-700 p-1">
+                    <button type="button" id="btnTypeOut" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white" onclick="setType('out')">ব্যয় (Expense)</button>
+                    <button type="button" id="btnTypeIn" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300" onclick="setType('in')">আয় (Income)</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Amount -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">পরিমাণ</label>
+                        <input type="number" id="amt" step="0.01" min="0.01" inputmode="decimal" required placeholder="0.00" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <!-- Currency Selector -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">মুদ্রা</label>
+                        <div class="flex rounded-lg border border-slate-200 dark:border-slate-600 overflow-hidden">
+                            <button type="button" id="btnCurAED" class="flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white" onclick="setCur('AED')">AED</button>
+                            <button type="button" id="btnCurBDT" class="flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300" onclick="setCur('BDT')">BDT</button>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">তারিখ</label>
+                        <input type="date" id="dt" required class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">ক্যাটেগরি</label>
+                        <select id="cat" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none"></select>
+                    </div>
+                </div>
+
+                <!-- Description Note -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">বিবরণ / নোট (ঐচ্ছিক)</label>
+                    <input type="text" id="note" maxlength="200" placeholder="যেমন: দেশের বাসায় রেমিটেন্স পাঠানো" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-3 pt-2">
+                    <button id="sb" type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-md flex items-center gap-2">
+                        <span>যোগ করুন</span>
+                    </button>
+                    <button id="cn" type="button" onclick="resetForm()" hidden class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-300 transition">বাতিল</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Entries List -->
+        <div class="space-y-4">
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white">লেনদেন বিবরণী</h2>
+            <div id="list" class="space-y-3">
+                <!-- Grouped entries render here -->
+            </div>
+        </div>
+
+        <!-- Backup & Utility Section -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden space-y-4">
+            <h2 class="text-lg font-bold">ব্যাকআপ, এক্সপোর্ট ও প্রিন্ট</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <button id="eb" class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition flex items-center justify-center gap-1.5">
+                    💾 ব্যাকআপ ফাইল
+                </button>
+                <button id="rs" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    📂 রিস্টোর ফাইল
+                </button>
+                <button id="ec" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    📊 CSV এক্সপোর্ট
+                </button>
+                <button id="pr" onclick="window.print()" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
+                    🖨️ প্রিন্ট করুন
+                </button>
+            </div>
+            <input type="file" id="file" accept=".json,application/json" hidden>
+
+            <!-- Text Backup Details -->
+            <details class="text-sm text-slate-500 pt-2">
+                <summary class="cursor-pointer hover:text-slate-700 dark:hover:text-slate-300">টেক্সট কপি-পেস্ট করে ব্যাকআপ/রিস্টোর</summary>
+                <div class="mt-3 space-y-2">
+                    <textarea id="ta" rows="4" class="w-full text-xs font-mono bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 outline-none" placeholder="JSON ব্যাকআপ কোড এখানে আসবে..."></textarea>
+                    <div class="flex gap-2">
+                        <button id="tb" class="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg text-xs font-semibold">কোড জেনারেট</button>
+                        <button id="tr" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold">কোড থেকে রিস্টোর</button>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-2xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-50"></div>
+
+    <!-- Login Modal Simulation -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">গুগল দিয়ে সাইন-ইন করুন</h3>
+            <p class="text-xs text-slate-500">আপনার একাউন্ট ডেমো সাইন-ইন করে ক্লাউড সিমুলেশন ডেটা সংরক্ষণ নিশ্চিত করুন।</p>
+            <div class="space-y-2 pt-2">
+                <button onclick="simulateLogin('মোঃ রফিকুল ইসলাম', 'rafiq.uae@gmail.com')" class="w-full flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 text-left transition">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">R</div>
+                    <div class="text-xs">
+                        <p class="font-bold text-slate-800 dark:text-slate-200">রফিকুল ইসলাম (Demo)</p>
+                        <p class="text-slate-400">rafiq.uae@gmail.com</p>
+                    </div>
+                </button>
+                <button onclick="simulateLogin('আরিফুল হক', 'arif.dubai@gmail.com')" class="w-full flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 text-left transition">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">A</div>
+                    <div class="text-xs">
+                        <p class="font-bold text-slate-800 dark:text-slate-200">আরিফুল হক (Demo)</p>
+                        <p class="text-slate-400">arif.dubai@gmail.com</p>
+                    </div>
+                </button>
+            </div>
+            <button onclick="closeLoginModal()" class="text-xs text-slate-400 hover:text-slate-600 mt-2">বন্ধ করুন</button>
+        </div>
     </div>
-    <div><label for="amt">পরিমাণ</label><input type="number" id="amt" step="0.01" min="0.01" inputmode="decimal" required placeholder="0.00"></div>
-    <div><label>মুদ্রা</label>
-      <div class="seg" role="group" aria-label="মুদ্রা"><button type="button" data-cur="AED">AED</button><button type="button" data-cur="BDT">BDT</button></div></div>
-    <div><label for="dt">তারিখ</label><input type="date" id="dt" required></div>
-    <div><label for="cat">ক্যাটেগরি</label><select id="cat"></select></div>
-    <div class="s2"><label for="note">বিবরণ (ঐচ্ছিক)</label><input type="text" id="note" maxlength="200" placeholder="যেমন: মাসের বাজার"></div>
-    <div class="s2 row2"><button class="btn p" id="sb" type="submit">যোগ করুন</button><button class="btn" id="cn" type="button" hidden>বাতিল</button></div>
-  </form>
-</section>
 
-<section aria-label="হিসাবের তালিকা"><div id="list"></div></section>
+    <script>
+        const K = 'hisab-khata-v2';
+        const CAT = {
+            out: ['খাবার ও বাজার', 'বাসা ভাড়া', 'দেশে পাঠানো (রেমিটেন্স)', 'যাতায়াত ও ফুয়েল', 'মোবাইল ও ইন্টারনেট', 'চিকিৎসা', 'পোশাক ও কেনাকাটা', 'বিনোদন', 'অন্যান্য ব্যয়'],
+            in: ['বেতন (Salary)', 'ওভারটাইম', 'ব্যবসা/ফ্রিল্যান্সিং', 'বোনাস', 'দেশ থেকে প্রাপ্ত', 'অন্যান্য আয়']
+        };
 
-<section class="card noprint" aria-label="ব্যাকআপ ও প্রিন্ট">
-  <h2>ব্যাকআপ, রিস্টোর ও প্রিন্ট</h2>
-  <div class="tools">
-    <button class="btn p" id="eb" type="button">ব্যাকআপ সেভ</button>
-    <button class="btn" id="rs" type="button">রিস্টোর</button>
-    <button class="btn" id="ec" type="button">CSV সেভ</button>
-    <button class="btn" id="pr" type="button">প্রিন্ট</button>
-  </div>
-  <input type="file" id="file" accept=".json,application/json,text/plain" hidden>
-  <div id="rc" class="card" hidden>
-    <p id="rt"></p>
-    <div class="row2" style="margin-top:10px">
-      <button class="btn p" id="rm" type="button">বর্তমান তথ্যের সাথে যোগ</button>
-      <button class="btn" id="rr" type="button">সব বদলে দিন</button>
-      <button class="btn" id="rx" type="button">বাতিল</button>
-    </div>
-  </div>
-  <details id="tx"><summary>লেখা কপি-পেস্ট করে ব্যাকআপ বা রিস্টোর</summary>
-    <textarea id="ta" aria-label="ব্যাকআপ লেখা" spellcheck="false"></textarea>
-    <div class="row2" style="margin-top:8px"><button class="btn" id="tb" type="button">ব্যাকআপ লেখা তৈরি</button><button class="btn" id="tr" type="button">এই লেখা থেকে রিস্টোর</button></div>
-  </details>
-  <p class="note">আপনার তথ্য এই ব্রাউজারেই জমা থাকে। ব্রাউজারের ডেটা মুছলে হারিয়ে যেতে পারে, তাই নিয়মিত ব্যাকআপ সেভ করে রাখুন। CSV ও প্রিন্টে বর্তমান ফিল্টারের তালিকা যায়।</p>
-</section>
-</main>
-<div id="toast" role="status" aria-live="polite"></div>
+        let S = {
+            entries: [],
+            rate: 33.00,
+            addIncentive: true,
+            user: null
+        };
 
-<script>
-const $=id=>document.getElementById(id);
-const K='hisab-khata-v1';
-const CAT={out:['খাবার','বাজার','বাসা ভাড়া','যাতায়াত','মোবাইল ও ইন্টারনেট','চিকিৎসা','দেশে পাঠানো','পোশাক','বিনোদন','অন্যান্য ব্যয়'],in:['বেতন','ওভারটাইম','ব্যবসা','বোনাস','দেশ থেকে প্রাপ্ত','অন্যান্য আয়']};
-let S={entries:[],rate:33},type='out',cur='AED',editId=null,pending=null,tt;
-const pad=n=>String(n).padStart(2,'0');
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const L10='bn-BD-u-nu-latn';
-const dl=d=>new Date(d+'T00:00:00').toLocaleDateString(L10,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-const ml=m=>new Date(m+'-01T00:00:00').toLocaleDateString(L10,{month:'long',year:'numeric'});
-const nf={AED:new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),BDT:new Intl.NumberFormat('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})};
-const money=(c,n)=>nf[c].format(n);
-const sg=(c,n)=>(n<0?'−':'')+money(c,Math.abs(n));
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)}
-function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&Array.isArray(d.entries))S={entries:d.entries,rate:+d.rate>0?+d.rate:33}}catch(e){}}
-function persist(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('ব্রাউজারে সেভ করা যায়নি। ব্যাকআপ সেভ করে রাখুন।')}}
+        let type = 'out';
+        let cur = 'AED';
+        let editId = null;
+        let tt;
 
-function view(){const m=$('mon').value,c=$('cf').value;return S.entries.filter(e=>(!m||e.date.startsWith(m))&&(!c||e.cur===c)).sort((a,b)=>b.date.localeCompare(a.date)||(b.t||0)-(a.t||0))}
-function tot(l){const t={AED:{in:0,out:0},BDT:{in:0,out:0}};l.forEach(e=>t[e.cur][e.type]+=e.amount);return t}
-const row=e=>`<div class="row"><div class="rm"><b>${esc(e.cat)}</b>${e.note?`<small>${esc(e.note)}</small>`:''}</div><div class="ra ${e.type}">${e.type==='in'?'+':'−'}${money(e.cur,e.amount)} <span class="cb ${e.cur}">${e.cur}</span></div><div class="rb noprint"><button data-a="ed" data-id="${esc(e.id)}">বদলান</button><button data-a="del" data-id="${esc(e.id)}">মুছুন</button></div></div>`;
+        const $ = id => document.getElementById(id);
+        const pad = n => String(n).padStart(2, '0');
+        const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+        const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
-function render(){
-  const l=view(),t=tot(l),r=S.rate,m=$('mon').value,c=$('cf').value;
-  $('sum').innerHTML=['AED','BDT'].map(k=>{const b=t[k].in-t[k].out;return `<tr><th scope="row"><span class="cb ${k}">${k}</span></th><td class="in">${money(k,t[k].in)}</td><td class="out">${money(k,t[k].out)}</td><td class="bal ${b<0?'out':'in'}">${sg(k,b)}</td></tr>`}).join('');
-  const bA=t.AED.in-t.AED.out,bB=t.BDT.in-t.BDT.out;
-  $('comb').innerHTML=`দুই মুদ্রা মিলিয়ে (1 AED = ${r} BDT ধরে): <b>${sg('AED',bA+bB/r)} AED</b> বা <b>${sg('BDT',bB+bA*r)} BDT</b>`;
-  $('pp').textContent=`সময়: ${m?ml(m):'সব সময়'}। মুদ্রা: ${c||'AED ও BDT'}। প্রিন্টের তারিখ: ${dl(today())}।`;
-  const gr={};l.forEach(e=>(gr[e.date]=gr[e.date]||[]).push(e));
-  let h='';
-  Object.keys(gr).sort().reverse().forEach(d=>{
-    const g=gr[d],n={AED:0,BDT:0};g.forEach(e=>n[e.cur]+=e.type==='in'?e.amount:-e.amount);
-    h+=`<div class="day"><header><h3>${dl(d)}</h3><span class="dn">${['AED','BDT'].filter(k=>g.some(e=>e.cur===k)).map(k=>`<span class="${n[k]<0?'out':'in'}">${k} ${sg(k,n[k])}</span>`).join('')}</span></header>${g.map(row).join('')}</div>`;
-  });
-  $('list').innerHTML=h||'<p class="empty">এই সময়ে কোনো হিসাব নেই। ওপরের ফর্মে প্রথম হিসাবটি লিখুন।</p>';
-}
+        const moneyFmt = {
+            AED: new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            BDT: new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        };
 
-function setType(t){type=t;document.querySelectorAll('[data-type]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.type===t));$('cat').innerHTML=CAT[t].map(c=>`<option>${c}</option>`).join('')}
-function setCur(c){cur=c;document.querySelectorAll('[data-cur]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cur===c))}
-function resetForm(){editId=null;$('amt').value='';$('note').value='';$('sb').textContent='যোগ করুন';$('ft').textContent='নতুন হিসাব লিখুন';$('cn').hidden=true}
-document.querySelectorAll('[data-type]').forEach(b=>b.onclick=()=>setType(b.dataset.type));
-document.querySelectorAll('[data-cur]').forEach(b=>b.onclick=()=>setCur(b.dataset.cur));
+        const money = (c, n) => moneyFmt[c].format(n);
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-$('f').onsubmit=ev=>{
-  ev.preventDefault();
-  const a=parseFloat($('amt').value);if(!(a>0))return;
-  const o={type,cur,date:$('dt').value,amount:Math.round(a*100)/100,cat:$('cat').value,note:$('note').value.trim()};
-  if(editId){const i=S.entries.findIndex(e=>e.id===editId);if(i>-1)S.entries[i]={...S.entries[i],...o}}else S.entries.push({id:uid(),t:Date.now(),...o});
-  if($('mon').value&&!o.date.startsWith($('mon').value))$('mon').value=o.date.slice(0,7);
-  const was=editId;resetForm();persist();render();toast(was?'আপডেট হয়েছে':'যোগ হয়েছে');
-};
-$('cn').onclick=resetForm;
-function edit(id){
-  const e=S.entries.find(x=>x.id===id);if(!e)return;
-  editId=id;setType(e.type);setCur(e.cur);$('dt').value=e.date;$('amt').value=e.amount;$('note').value=e.note||'';
-  if(!CAT[e.type].includes(e.cat))$('cat').insertAdjacentHTML('beforeend',`<option>${esc(e.cat)}</option>`);
-  $('cat').value=e.cat;$('sb').textContent='আপডেট করুন';$('ft').textContent='হিসাব বদলান';$('cn').hidden=false;$('f').scrollIntoView();
-}
-$('list').onclick=e=>{
-  const b=e.target.closest('button');if(!b)return;const id=b.dataset.id;
-  if(b.dataset.a==='ed')return edit(id);
-  if(b.dataset.a==='del'){
-    if(b.dataset.arm){S.entries=S.entries.filter(x=>x.id!==id);persist();render();toast('মুছে ফেলা হয়েছে')}
-    else{b.dataset.arm='1';b.textContent='নিশ্চিত?';b.classList.add('dg');setTimeout(()=>{b.dataset.arm='';b.textContent='মুছুন';b.classList.remove('dg')},3000)}
-  }
-};
-$('mon').onchange=$('cf').onchange=render;
-$('all').onclick=()=>{$('mon').value='';render()};
-$('rate').oninput=()=>{const v=parseFloat($('rate').value);if(v>0){S.rate=v;persist();render()}};
+        function toast(m) {
+            const t = $('toast');
+            t.textContent = m;
+            t.classList.remove('opacity-0', 'pointer-events-none');
+            clearTimeout(tt);
+            tt = setTimeout(() => t.classList.add('opacity-0', 'pointer-events-none'), 3000);
+        }
 
-const pack=()=>JSON.stringify({app:'hisab-khata',v:1,exportedAt:new Date().toISOString(),rate:S.rate,entries:S.entries},null,1);
-function csv(){
-  const q=s=>{s=String(s);if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
-  return '\ufeff'+['তারিখ,ধরন,ক্যাটেগরি,বিবরণ,মুদ্রা,পরিমাণ'].concat(view().map(e=>[e.date,e.type==='in'?'আয়':'ব্যয়',q(e.cat),q(e.note||''),e.cur,e.amount].join(','))).join('\r\n');
-}
-async function save(name,data){
-  try{
-    const d=typeof claude!=='undefined'&&await claude.use('downloads');
-    if(!d)throw{code:'unavailable'};
-    await d.save({filename:name,data});toast('ফাইল সেভ হয়েছে');
-  }catch(e){
-    if(e&&e.code==='declined')return;
-    toast('এই ভিউতে ফাইল সেভ করা যাচ্ছে না। নিচের লেখা কপি করে রাখুন।');
-    $('ta').value=typeof data==='string'?data.replace(/^\ufeff/,''):'';$('tx').open=true;
-  }
-}
-$('eb').onclick=()=>save('hisab-khata-backup-'+today()+'.json',pack());
-$('ec').onclick=()=>save('hisab-khata-'+today()+'.csv',csv());
-$('pr').onclick=()=>{try{window.print()}catch(e){toast('এই ভিউতে প্রিন্ট চালু নেই। ব্রাউজারে পেজটি খুলে চেষ্টা করুন।')}};
-$('tb').onclick=()=>{$('ta').value=pack()};
+        // Theme Toggle
+        const themeBtn = $('themeToggleBtn');
+        themeBtn.onclick = () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
 
-function readBackup(text){
-  let d;try{d=JSON.parse(text)}catch(e){return toast('লেখাটি পড়া যায়নি। হিসাব খাতার ব্যাকআপ (JSON) দিন।')}
-  const arr=Array.isArray(d)?d:d&&d.entries;
-  if(!Array.isArray(arr))return toast('এতে কোনো হিসাব পাওয়া যায়নি।');
-  const ok=[];
-  arr.forEach(x=>{if(x&&(x.type==='in'||x.type==='out')&&(x.cur==='AED'||x.cur==='BDT')&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&+x.amount>0)ok.push({id:/^[\w-]{1,40}$/.test(String(x.id))?String(x.id):uid(),t:+x.t||Date.now(),type:x.type,cur:x.cur,date:x.date,amount:Math.round(+x.amount*100)/100,cat:String(x.cat||'অন্যান্য').slice(0,60),note:String(x.note||'').slice(0,200)})});
-  if(!ok.length)return toast('বৈধ কোনো হিসাব পাওয়া যায়নি।');
-  pending={ok,rate:d&&+d.rate>0?+d.rate:null};
-  const sk=arr.length-ok.length;
-  $('rt').textContent=`${ok.length}টি হিসাব পাওয়া গেছে${sk?` (${sk}টি বাদ গেছে)`:''}। এখন কী করবেন?`;
-  $('rc').hidden=false;$('rc').scrollIntoView();
-}
-function done(){persist();pending=null;$('rc').hidden=true;$('rate').value=S.rate;render();toast('রিস্টোর হয়েছে')}
-$('rm').onclick=()=>{const ids=new Set(S.entries.map(e=>e.id));pending.ok.forEach(e=>{if(!ids.has(e.id))S.entries.push(e)});done()};
-$('rr').onclick=()=>{S.entries=pending.ok;if(pending.rate)S.rate=pending.rate;done()};
-$('rx').onclick=()=>{pending=null;$('rc').hidden=true};
-$('rs').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>readBackup(String(r.result));r.readAsText(f);e.target.value=''};
-$('tr').onclick=()=>readBackup($('ta').value);
+        // Incentive Rate Logic
+        function getEffectiveRate() {
+            const base = S.rate || 33.00;
+            return S.addIncentive ? base * 1.025 : base;
+        }
 
-load();
-$('dt').value=today();$('mon').value=today().slice(0,7);$('rate').value=S.rate;
-setType('out');setCur('AED');render();
-</script>
+        function load() {
+            try {
+                const d = JSON.parse(localStorage.getItem(K));
+                if (d) {
+                    S.entries = Array.isArray(d.entries) ? d.entries : [];
+                    S.rate = +d.rate > 0 ? +d.rate : 33.00;
+                    S.addIncentive = typeof d.addIncentive === 'boolean' ? d.addIncentive : true;
+                    S.user = d.user || null;
+                }
+            } catch (e) {}
+        }
+
+        function persist() {
+            try {
+                localStorage.setItem(K, JSON.stringify(S));
+            } catch (e) {
+                toast('ডেটা সংরক্ষণ করতে ব্যর্থ হয়েছে!');
+            }
+        }
+
+        // Auth Logic Simulation
+        $('googleSignInBtn').onclick = () => $('loginModal').classList.remove('hidden'), $('loginModal').classList.add('flex');
+        function closeLoginModal() { $('loginModal').classList.add('hidden'); $('loginModal').classList.remove('flex'); }
+        function simulateLogin(name, email) {
+            S.user = { name, email, avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}` };
+            persist();
+            updateUserUI();
+            closeLoginModal();
+            toast(`স্বাগতম, ${name}!`);
+        }
+        $('signOutBtn').onclick = () => {
+            S.user = null;
+            persist();
+            updateUserUI();
+            toast('সাইন আউট সম্পন্ন হয়েছে');
+        };
+
+        function updateUserUI() {
+            if (S.user) {
+                $('googleSignInBtn').classList.add('hidden');
+                $('userInfo').classList.remove('hidden');
+                $('userAvatar').src = S.user.avatar;
+                $('userName').textContent = S.user.name;
+                $('userEmail').textContent = S.user.email;
+            } else {
+                $('googleSignInBtn').classList.remove('hidden');
+                $('userInfo').classList.add('hidden');
+            }
+        }
+
+        function view() {
+            const m = $('mon').value;
+            const c = $('cf').value;
+            return S.entries.filter(e => (!m || e.date.startsWith(m)) && (!c || e.cur === c))
+                .sort((a, b) => b.date.localeCompare(a.date) || (b.t || 0) - (a.t || 0));
+        }
+
+        function render() {
+            const list = view();
+            const baseRate = S.rate || 33;
+            const effRate = getEffectiveRate();
+
+            // Update Rate Texts
+            $('rate').value = baseRate;
+            $('incentiveToggle').checked = S.addIncentive;
+            $('baseRateTxt').textContent = baseRate.toFixed(2);
+            $('incAmtTxt').textContent = (baseRate * 0.025).toFixed(2);
+            $('effectiveRateBadge').textContent = `কার্যকর রেট: ${effRate.toFixed(2)} BDT`;
+            $('rateDisclaimer').textContent = `১ AED = ${effRate.toFixed(2)} BDT (${S.addIncentive ? '২.৫% প্রণোদনা সহ' : 'মূল রেট'})`;
+
+            // Totals
+            const totals = { AED: { in: 0, out: 0 }, BDT: { in: 0, out: 0 } };
+            list.forEach(e => totals[e.cur][e.type] += e.amount);
+
+            // Render Table
+            $('sum').innerHTML = ['AED', 'BDT'].map(k => {
+                const bal = totals[k].in - totals[k].out;
+                return `
+                    <tr class="text-sm">
+                        <td class="py-2.5 font-bold text-slate-700 dark:text-slate-300">${k}</td>
+                        <td class="py-2.5 text-right font-medium text-emerald-600 dark:text-emerald-400">+${money(k, totals[k].in)}</td>
+                        <td class="py-2.5 text-right font-medium text-red-500">-${money(k, totals[k].out)}</td>
+                        <td class="py-2.5 text-right font-bold ${bal < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white'}">${money(k, bal)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Combined Net Calculation
+            const balAED = totals.AED.in - totals.AED.out;
+            const balBDT = totals.BDT.in - totals.BDT.out;
+
+            const combInAED = balAED + (balBDT / effRate);
+            const combInBDT = balBDT + (balAED * effRate);
+
+            $('combAED').textContent = `${money('AED', combInAED)} AED`;
+            $('combBDT').textContent = `${money('BDT', combInBDT)} BDT`;
+
+            // Render Daily Grouped List
+            const grouped = {};
+            list.forEach(e => (grouped[e.date] = grouped[e.date] || []).push(e));
+
+            let html = '';
+            Object.keys(grouped).sort().reverse().forEach(d => {
+                const dayEntries = grouped[d];
+                html += `
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${d}</span>
+                        </div>
+                        <div class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                            ${dayEntries.map(e => `
+                                <div class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition">
+                                    <div class="flex-1">
+                                        <p class="font-bold text-sm text-slate-800 dark:text-slate-200">${esc(e.cat)}</p>
+                                        ${e.note ? `<p class="text-xs text-slate-400 mt-0.5">${esc(e.note)}</p>` : ''}
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-sm ${e.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}">
+                                            ${e.type === 'in' ? '+' : '-'}${money(e.cur, e.amount)} <span class="text-xs font-medium text-slate-400">${e.cur}</span>
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-1 print:hidden">
+                                        <button onclick="edit('${esc(e.id)}')" class="p-1.5 text-slate-400 hover:text-emerald-600 transition">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        </button>
+                                        <button onclick="del('${esc(e.id)}')" class="p-1.5 text-slate-400 hover:text-red-500 transition">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('list').innerHTML = html || '<div class="text-center py-10 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-400 text-sm">কোনো হিসাব পাওয়া যায়নি। নতুন একটি যোগ করুন।</div>';
+        }
+
+        function setType(t) {
+            type = t;
+            if (t === 'out') {
+                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white';
+                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
+            } else {
+                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-emerald-600 text-white';
+                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
+            }
+            $('cat').innerHTML = CAT[t].map(c => `<option>${c}</option>`).join('');
+        }
+
+        function setCur(c) {
+            cur = c;
+            if (c === 'AED') {
+                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
+                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+            } else {
+                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
+                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+            }
+        }
+
+        function resetForm() {
+            editId = null;
+            $('amt').value = '';
+            $('note').value = '';
+            $('sb').textContent = 'যোগ করুন';
+            $('ft').textContent = 'নতুন হিসাব লিখুন';
+            $('cn').hidden = true;
+        }
+
+        $('f').onsubmit = ev => {
+            ev.preventDefault();
+            const a = parseFloat($('amt').value);
+            if (!(a > 0)) return;
+
+            const entry = {
+                type,
+                cur,
+                date: $('dt').value,
+                amount: Math.round(a * 100) / 100,
+                cat: $('cat').value,
+                note: $('note').value.trim()
+            };
+
+            if (editId) {
+                const idx = S.entries.findIndex(e => e.id === editId);
+                if (idx > -1) S.entries[idx] = { ...S.entries[idx], ...entry };
+            } else {
+                S.entries.push({ id: uid(), t: Date.now(), ...entry });
+            }
+
+            resetForm();
+            persist();
+            render();
+            toast(editId ? 'আপডেট সম্পন্ন হয়েছে' : 'হিসাব যোগ হয়েছে');
+        };
+
+        function edit(id) {
+            const e = S.entries.find(x => x.id === id);
+            if (!e) return;
+            editId = id;
+            setType(e.type);
+            setCur(e.cur);
+            $('dt').value = e.date;
+            $('amt').value = e.amount;
+            $('note').value = e.note || '';
+            $('cat').value = e.cat;
+            $('sb').textContent = 'আপডেট করুন';
+            $('ft').textContent = 'হিসাব পরিবর্তন করুন';
+            $('cn').hidden = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function del(id) {
+            if (confirm('আপনি কি এই হিসাবটি মুছে ফেলতে চান?')) {
+                S.entries = S.entries.filter(x => x.id !== id);
+                persist();
+                render();
+                toast('মুছে ফেলা হয়েছে');
+            }
+        }
+
+        $('rate').oninput = e => {
+            const v = parseFloat(e.target.value);
+            if (v > 0) {
+                S.rate = v;
+                persist();
+                render();
+            }
+        };
+
+        $('incentiveToggle').onchange = e => {
+            S.addIncentive = e.target.checked;
+            persist();
+            render();
+        };
+
+        $('mon').onchange = render;
+        $('cf').onchange = render;
+        $('all').onclick = () => { $('mon').value = ''; render(); };
+
+        // Backup & Restore
+        $('eb').onclick = () => {
+            const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `hisab-khata-backup-${today()}.json`;
+            a.click();
+        };
+
+        $('rs').onclick = () => $('file').click();
+        $('file').onchange = e => {
+            const f = e.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = () => {
+                try {
+                    const parsed = JSON.parse(r.result);
+                    if (Array.isArray(parsed.entries)) {
+                        S.entries = parsed.entries;
+                        if (parsed.rate) S.rate = parsed.rate;
+                        persist();
+                        render();
+                        toast('রিস্টোর সফল হয়েছে');
+                    }
+                } catch (err) {
+                    toast('ভুল ব্যাকআপ ফাইল');
+                }
+            };
+            r.readAsText(f);
+        };
+
+        $('tb').onclick = () => {
+            $('ta').value = JSON.stringify(S, null, 2);
+        };
+
+        $('tr').onclick = () => {
+            try {
+                const parsed = JSON.parse($('ta').value);
+                if (Array.isArray(parsed.entries)) {
+                    S.entries = parsed.entries;
+                    persist();
+                    render();
+                    toast('রিস্টোর সফল হয়েছে');
+                }
+            } catch (err) {
+                toast('ভুল কোড');
+            }
+        };
+
+        // Initialize App
+        load();
+        updateUserUI();
+        $('dt').value = today();
+        $('mon').value = today().slice(0, 7);
+        setType('out');
+        setCur('AED');
+        render();
+    </script>
 </body>
 </html>
+```
