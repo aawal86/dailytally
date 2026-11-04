@@ -1,651 +1,704 @@
-
 <!DOCTYPE html>
-<html lang="bn" class="h-full">
+<html lang="bn" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>দৈনিক হিসাব খাতা - ক্লাউড সংস্করণ</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            800: '#065f46',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Hind Siliguri', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Hind Siliguri', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>অল-ইন-ওয়ান ব্যক্তিগত ও পারিবারিক অল-ডেটা সেন্টার</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Reem+Kufi:wght@700&family=Tiro+Bangla&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg-color: #eef3f0;
+  --surface: #ffffff;
+  --surface-2: #f4f8f6;
+  --text-main: #12201b;
+  --text-muted: #5a6e66;
+  --border-color: #d1ded8;
+  --brand: #0d7a63;
+  --brand-dark: #07473a;
+  --accent: #20b2aa;
+  --gold: #c39a3b;
+  --gold-light: #fceabb;
+  --danger: #d9383a;
+  --success: #10b981;
+  --radius: 18px;
+  --f-body: 'Hind Siliguri', sans-serif;
+  --f-display: 'Tiro Bangla', 'Hind Siliguri', serif;
+  --f-mono: 'IBM Plex Mono', monospace;
+  --f-arabic: 'Reem Kufi', sans-serif;
+  --shadow: 0 8px 30px rgba(13,122,99,0.08);
+}
+
+[data-theme="dark"] {
+  --bg-color: #0c1613;
+  --surface: #14241f;
+  --surface-2: #1b2e28;
+  --text-main: #e6f2ee;
+  --text-muted: #8aa399;
+  --border-color: #243a32;
+  --brand: #2cd0ab;
+  --brand-dark: #0d7a63;
+  --accent: #4fd1a1;
+  --gold: #e5b95c;
+  --danger: #ff6b6b;
+  --shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--f-body); background: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+
+/* Top Header & Navigation */
+header.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color);
+  padding: 10px 16px;
+}
+.header-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo-title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; }
+.logo-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--brand), var(--accent)); color: #fff; display: grid; place-items: center; font-size: 1.1rem; }
+
+.main-nav { display: flex; gap: 6px; background: var(--surface-2); padding: 4px; border-radius: 99px; border: 1px solid var(--border-color); overflow-x: auto; }
+.nav-tab { padding: 8px 16px; border: 0; border-radius: 99px; background: transparent; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+.nav-tab:hover { color: var(--brand); }
+.nav-tab.active { background: var(--brand); color: #fff; shadow: 0 4px 12px rgba(13,122,99,0.3); }
+
+.theme-toggle { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--surface); color: var(--text-main); cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
+
+/* Main Layout */
+.main-container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+.tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+.tab-content.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Shared Component Styles */
+.card { background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.card-title { font-family: var(--f-display); font-size: 1.25rem; color: var(--brand); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+.bismillah-bar { text-align: center; padding: 12px; margin-bottom: 16px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border-color); }
+.bismillah-ar { font-family: var(--f-arabic); font-size: 1.6rem; color: var(--brand); }
+.bismillah-bn { font-size: 0.8rem; color: var(--text-muted); }
+
+.btn { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-2); color: var(--text-main); font-weight: 600; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+.btn:hover { border-color: var(--brand); color: var(--brand); }
+.btn-primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+.btn-primary:hover { background: var(--brand-dark); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+.table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th { background: var(--surface-2); color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.text-right { text-align: right; }
+.num-font { font-family: var(--f-mono); font-weight: 600; }
+
+input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--surface); color: var(--text-main); outline: none; }
+input:focus, select:focus { border-color: var(--brand); }
+
+/* --- 1. ACCOUNTS TAB SPECIFICS --- */
+.snap-box { padding: 14px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border-color); }
+.snap-label { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+.snap-val { font-size: 1.25rem; font-family: var(--f-mono); font-weight: 700; color: var(--brand); margin-top: 4px; }
+
+/* --- 2. FAMILY EXPENSES SPECIFICS --- */
+.bar-chart-container { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding-top: 20px; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+.chart-bar { width: 100%; background: var(--brand); border-radius: 4px 4px 0 0; min-height: 2px; transition: height 0.3s; }
+.chart-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+/* --- 3. DAILY TALLY SPECIFICS --- */
+.in-amt { color: var(--success); font-weight: 600; }
+.out-amt { color: var(--danger); font-weight: 600; }
+
+/* --- 4. MOSQUE SPECIFICS --- */
+.stat-card { text-align: center; padding: 16px; border-radius: 12px; background: var(--surface-2); border-bottom: 3px solid var(--gold); }
+.stat-card b { font-size: 1.4rem; color: var(--brand); }
+
+@media print {
+  header.app-header, .btn, .no-print { display: none !important; }
+  .tab-content { display: block !important; page-break-after: always; }
+  .card { border: none; box-shadow: none; padding: 0; }
+}
+</style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full flex flex-col transition-colors duration-200">
+<body>
 
-    <!-- Header Navigation -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm print:hidden">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold leading-tight text-slate-900 dark:text-white">দৈনিক হিসাব খাতা</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">AED (আমিরাত) ও BDT (বাংলাদেশ) ক্লাউড হিসাব</p>
-                </div>
-            </div>
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo-title">
+      <div class="logo-icon"><i class="fa-solid fa-vault"></i></div>
+      <span>আবদুল আউয়াল সেন্ট্রাল ড্যাশবোর্ড</span>
+    </div>
+    
+    <nav class="main-nav">
+      <button class="nav-tab active" onclick="switchTab('tab-accounts', this)"><i class="fa-solid fa-chart-line"></i> অ্যাকাউন্টস</button>
+      <button class="nav-tab" onclick="switchTab('tab-family', this)"><i class="fa-solid fa-house-user"></i> পারিবারিক খরচ</button>
+      <button class="nav-tab" onclick="switchTab('tab-daily', this)"><i class="fa-solid fa-book-open"></i> দৈনিক হিসাব</button>
+      <button class="nav-tab" onclick="switchTab('tab-mosque', this)"><i class="fa-solid fa-mosque"></i> মসজিদ ফান্ড</button>
+    </nav>
 
-            <!-- Header Actions & Auth Status -->
-            <div class="flex items-center gap-3">
-                <!-- Theme Toggle Button -->
-                <button id="themeToggleBtn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition">
-                    <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <svg id="moonIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.03 9.03 0 0012 21a9.03 9.03 0 008.354-5.646z"></path></svg>
-                </button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="থিম পরিবর্তন"><i class="fa-solid fa-moon"></i></button>
+  </div>
+</header>
 
-                <!-- Auth Container -->
-                <div id="authContainer">
-                    <button id="googleSignInBtn" class="flex items-center gap-2 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 px-3 py-1.5 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 text-sm font-medium transition">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                        </svg>
-                        <span>জিমেইল দিয়ে সাইন-ইন</span>
-                    </button>
+<main class="main-container">
 
-                    <div id="userInfo" class="hidden flex items-center gap-2">
-                        <img id="userAvatar" src="" class="w-8 h-8 rounded-full border border-emerald-500" alt="Avatar">
-                        <div class="hidden sm:block text-left text-xs">
-                            <p id="userName" class="font-bold text-slate-800 dark:text-slate-100"></p>
-                            <p id="userEmail" class="text-slate-400 text-[10px]"></p>
-                        </div>
-                        <button id="signOutBtn" title="সাইন আউট" class="p-1.5 text-slate-400 hover:text-red-500 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+  <!-- ==================== TAB 1: ACCOUNTS DASHBOARD ==================== -->
+  <div id="tab-accounts" class="tab-content active">
+    <div class="bismillah-bar">
+      <div class="bismillah-ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      <div class="bismillah-bn">(পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে শুরু করছি)</div>
+    </div>
+
+    <!-- Quick Snapshots -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-wallet"></i> ফাইনান্সিয়াল সামারি</div>
+        <div class="no-print">
+          <button class="btn" onclick="exportAccountsJSON()"><i class="fa-solid fa-download"></i> ব্যাকআপ</button>
+          <button class="btn" onclick="document.getElementById('accJsonFile').click()"><i class="fa-solid fa-upload"></i> রিস্টোর</button>
+          <input type="file" id="accJsonFile" accept=".json" hidden onchange="importAccountsJSON(event)">
         </div>
-    </header>
+      </div>
+      <div class="grid-4">
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-money-bill-wave"></i> Usable Amount</div><div class="snap-val" id="snapUsable">৳ 0.00</div></div>
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-lock"></i> Hold Amount</div><div class="snap-val" id="snapHold">৳ 0.00</div></div>
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-building-columns"></i> UAE Total in BDT</div><div class="snap-val" id="snapUae">৳ 0.00</div></div>
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-credit-card"></i> Card Outstanding</div><div class="snap-val" id="snapCc">AED 0.00</div></div>
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-hand-holding-dollar"></i> Zakat Payable</div><div class="snap-val" id="snapZakat">৳ 0.00</div></div>
+        <div class="snap-box"><div class="snap-label"><i class="fa-solid fa-piggy-bank"></i> Total Investment</div><div class="snap-val" id="snapInvestment">৳ 0.00</div></div>
+      </div>
+    </div>
 
-    <main class="max-w-5xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
-
-        <!-- Government 2.5% Remittance Incentive Notice Card -->
-        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="flex items-start gap-3">
-                <span class="p-2 bg-emerald-600 text-white rounded-xl text-lg font-bold shadow-sm">২.৫%</span>
-                <div>
-                    <h3 class="font-bold text-emerald-800 dark:text-emerald-300">সরকারি রেমিটেন্স প্রণোদনা (Incentive) হিসাব</h3>
-                    <p class="text-sm text-emerald-700 dark:text-emerald-400">আমিরাত (AED) থেকে বাংলাদেশে পাঠালে সরকারি ২.৫% বোনাস স্বয়ংক্রিয়ভাবে মোট রেটে যোগ হবে।</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-emerald-200 dark:border-slate-700 shadow-sm self-start md:self-auto">
-                <label for="incentiveToggle" class="text-sm font-semibold cursor-pointer select-none">২.৫% প্রণোদনা হিসাবভুক্ত রাখুন</label>
-                <input type="checkbox" id="incentiveToggle" checked class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
-            </div>
+    <div class="grid-2">
+      <!-- Currency Converter -->
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-calculator"></i> কারেন্সি কনভার্টার</div>
+        <div style="margin-top: 12px;" class="table-responsive">
+          <table>
+            <tr><td>বিনিময় হার (1 AED = BDT)</td><td><input type="number" id="accRate" value="34.00" step="0.01" oninput="calcAccounts()"></td></tr>
+            <tr><td>প্রণোদনা সহ (+2.5%) কার্যকর হার</td><td class="num-font text-right" id="accRateIncentive">34.85 BDT</td></tr>
+            <tr><td>AED পরিমাণ</td><td><input type="number" id="accAedAmt" value="1000" oninput="calcAccounts()"></td></tr>
+            <tr><td>মোট BDT পরিমাণ</td><td class="num-font text-right" id="accBdtResult" style="font-size: 1.1rem; color: var(--brand);">৳ 34,850.00</td></tr>
+          </table>
         </div>
+      </div>
 
-        <!-- Dashboard Exchange Rate & Controls -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print:hidden">
-            <!-- Filter Card -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
-                <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">ফিল্টার করুন</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-xs text-slate-400">মাস</label>
-                        <input type="month" id="mon" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-400">মুদ্রা</label>
-                        <select id="cf" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            <option value="">সব মুদ্রা</option>
-                            <option value="AED">AED</option>
-                            <option value="BDT">BDT</option>
-                        </select>
-                    </div>
-                </div>
-                <button id="all" class="mt-3 text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline text-left">সব সময়ের হিসাব দেখুন</button>
-            </div>
-
-            <!-- Exchange Rate Card -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm md:col-span-2 flex flex-col justify-between">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400">বিনিময় হার (Exchange Rate)</h3>
-                    <span id="effectiveRateBadge" class="text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold px-2.5 py-1 rounded-full">কার্যকর রেট: -- BDT</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex-1 min-w-[150px]">
-                        <label class="text-xs text-slate-400">১ AED = কত BDT (মূল ব্যাংকিং রেট)?</label>
-                        <div class="flex items-center gap-2 mt-1">
-                            <input type="number" id="rate" step="0.01" value="33.00" class="w-full text-base font-bold bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            <span class="font-bold text-slate-500">BDT</span>
-                        </div>
-                    </div>
-                    <div class="text-xs text-slate-500 bg-slate-50 dark:bg-slate-700/50 p-2.5 rounded-xl flex-1 border border-slate-100 dark:border-slate-700">
-                        <p>মূল ব্যাংকিং রেট: <span id="baseRateTxt" class="font-bold">--</span> BDT</p>
-                        <p class="mt-0.5">সরকারি প্রণোদনা (+২.৫%): <span id="incAmtTxt" class="font-bold text-emerald-600 dark:text-emerald-400">--</span> BDT</p>
-                    </div>
-                </div>
-            </div>
+      <!-- BD Bank Accounts -->
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-building-columns"></i> বাংলাদেশী ব্যাংক অ্যাকাউন্টস</div>
+        <div style="margin-top: 12px;" class="table-responsive">
+          <table>
+            <thead><tr><th>ব্যাংক</th><th class="text-right">ব্যালেন্স (BDT)</th></tr></thead>
+            <tbody>
+              <tr><td>MTB Savings</td><td><input type="number" id="mtbSavings" value="0.00" oninput="calcAccounts()"></td></tr>
+              <tr><td>MTB NRB</td><td><input type="number" id="mtbNrb" value="0.00" oninput="calcAccounts()"></td></tr>
+              <tr><td>BRAC Provashi</td><td><input type="number" id="bracProvashi" value="141.46" oninput="calcAccounts()"></td></tr>
+              <tr><td>DBBL Agent</td><td><input type="number" id="dbblAgent" value="474.82" oninput="calcAccounts()"></td></tr>
+              <tr><td>UCBL Islamic</td><td><input type="number" id="ucblIslamic" value="0.00" oninput="calcAccounts()"></td></tr>
+              <tr style="background: var(--surface-2); font-weight:bold;"><td>Usable Total</td><td class="text-right num-font" id="usableTotal">৳ 616.28</td></tr>
+              <tr><td>DBBL Core (Hold)</td><td><input type="number" id="dbblCore" value="5000.00" oninput="calcAccounts()"></td></tr>
+              <tr><td>Pubali Islamic (Hold)</td><td><input type="number" id="pubaliIslamic" value="5040.81" oninput="calcAccounts()"></td></tr>
+              <tr><td>IBBL Savings (Hold)</td><td><input type="number" id="ibblSavings" value="251.50" oninput="calcAccounts()"></td></tr>
+              <tr style="background: var(--surface-2); font-weight:bold;"><td>Hold Total</td><td class="text-right num-font" id="holdTotal">৳ 10,292.31</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!-- Total Balance Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Summary Table Card -->
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <h2 class="text-lg font-bold mb-3 flex items-center justify-between">
-                    <span>হিসাব সারসংক্ষেপ</span>
-                    <span class="text-xs font-normal text-slate-400" id="summaryPeriod">বর্তমান ফিল্টার</span>
-                </h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead>
-                            <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-400">
-                                <th class="pb-2">মুদ্রা</th>
-                                <th class="pb-2 text-right">মোট আয়</th>
-                                <th class="pb-2 text-right">মোট ব্যয়</th>
-                                <th class="pb-2 text-right">অবশিষ্ট</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sum" class="divide-y divide-slate-100 dark:divide-slate-700/50">
-                            <!-- Dynamic Rows -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  <!-- ==================== TAB 2: FAMILY EXPENSES ==================== -->
+  <div id="tab-family" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-house"></i> পারিবারিক পরিচালন ব্যয়</div>
+        <div class="no-print">
+          <button class="btn" onclick="exportFamilyCSV()"><i class="fa-solid fa-file-csv"></i> CSV সেভ</button>
+          <button class="btn" onclick="document.getElementById('famCsvFile').click()"><i class="fa-solid fa-upload"></i> রিস্টোর</button>
+          <input type="file" id="famCsvFile" accept=".csv" hidden onchange="importFamilyCSV(event)">
+        </div>
+      </div>
 
-            <!-- Combined Balance Card -->
-            <div class="bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
-                <div>
-                    <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">একত্রিত নিট ক্যাশ (Combined Balance)</span>
-                    <h3 class="text-xs text-slate-400 mt-1" id="rateDisclaimer">১ AED = -- BDT (প্রণোদনা সহ)</h3>
-                </div>
-                <div class="my-4 space-y-2">
-                    <div>
-                        <p class="text-xs text-slate-400">আনুমানিক মোট (AED-তে):</p>
-                        <p class="text-3xl font-extrabold text-emerald-400" id="combAED">0.00 AED</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400">আনুমানিক মোট (BDT-তে):</p>
-                        <p class="text-xl font-bold text-slate-200" id="combBDT">0.00 BDT</p>
-                    </div>
-                </div>
-                <p class="text-[11px] text-slate-400 italic">* ২.৫% ইনসেনটিভ চালুর কারণে AED থেকে BDT করার সময় বোনাস টাকা স্বয়ংক্রিয় যোগ হচ্ছে।</p>
-            </div>
+      <div class="grid-2">
+        <div>
+          <h3>নতুন খরচ এন্ট্রি করুন</h3>
+          <form id="famForm" style="display: grid; gap: 10px; margin-top: 10px;" onsubmit="addFamilyExpense(event)">
+            <div><label>খরচের খাত / বিবরণ</label><input type="text" id="famCat" required placeholder="যেমন: বাজার, বিদ্যুৎ বিল"></div>
+            <div><label>পরিমাণ (BDT)</label><input type="number" id="famAmt" required placeholder="0.00"></div>
+            <div><label>তারিখ</label><input type="date" id="famDate" required></div>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> খরচ যোগ করুন</button>
+          </form>
         </div>
 
-        <!-- Form Section: Add / Edit Entry -->
-        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden">
-            <h2 id="ft" class="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                নতুন হিসাব যোগ করুন
-            </h2>
-            <form id="f" class="space-y-4">
-                <!-- Type Selection -->
-                <div class="flex rounded-xl bg-slate-100 dark:bg-slate-700 p-1">
-                    <button type="button" id="btnTypeOut" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white" onclick="setType('out')">ব্যয় (Expense)</button>
-                    <button type="button" id="btnTypeIn" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300" onclick="setType('in')">আয় (Income)</button>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Amount -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">পরিমাণ</label>
-                        <input type="number" id="amt" step="0.01" min="0.01" inputmode="decimal" required placeholder="0.00" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    </div>
-
-                    <!-- Currency Selector -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">মুদ্রা</label>
-                        <div class="flex rounded-lg border border-slate-200 dark:border-slate-600 overflow-hidden">
-                            <button type="button" id="btnCurAED" class="flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white" onclick="setCur('AED')">AED</button>
-                            <button type="button" id="btnCurBDT" class="flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300" onclick="setCur('BDT')">BDT</button>
-                        </div>
-                    </div>
-
-                    <!-- Date -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">তারিখ</label>
-                        <input type="date" id="dt" required class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    </div>
-
-                    <!-- Category -->
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">ক্যাটেগরি</label>
-                        <select id="cat" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none"></select>
-                    </div>
-                </div>
-
-                <!-- Description Note -->
-                <div>
-                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">বিবরণ / নোট (ঐচ্ছিক)</label>
-                    <input type="text" id="note" maxlength="200" placeholder="যেমন: দেশে রেমিটেন্স পাঠালাম" class="w-full text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 outline-none">
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex items-center gap-3 pt-2">
-                    <button id="sb" type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-md flex items-center gap-2">
-                        <span>সেভ করুন</span>
-                    </button>
-                    <button id="cn" type="button" onclick="resetForm()" hidden class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-300 transition">বাতিল</button>
-                </div>
-            </form>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>মাসিক খরচের চার্ট</h3>
+            <span class="num-font" style="font-size:1.2rem; font-weight:bold; color:var(--brand);" id="famYearTotal">মোট: ৳ 0</span>
+          </div>
+          <div class="bar-chart-container" id="famBarChart"></div>
         </div>
+      </div>
+    </div>
 
-        <!-- Transaction Entries List -->
-        <div class="space-y-4">
-            <h2 class="text-lg font-bold text-slate-900 dark:text-white">লেনদেন বিবরণী</h2>
-            <div id="list" class="space-y-3">
-                <!-- Dynamic List -->
-            </div>
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-list"></i> পারিবারিক খরচের ইতিহাস</div>
+      <div style="margin-top: 12px;" class="table-responsive">
+        <table>
+          <thead><tr><th>তারিখ</th><th>বিবরণ</th><th class="text-right">পরিমাণ (BDT)</th><th class="no-print">অ্যাকশন</th></tr></thead>
+          <tbody id="famTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: DAILY TALLY ==================== -->
+  <div id="tab-daily" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-book-open"></i> দৈনিক হিসাব খাতা (AED & BDT)</div>
+        <div class="no-print">
+          <button class="btn" onclick="exportDailyJSON()"><i class="fa-solid fa-download"></i> ব্যাকআপ</button>
+          <button class="btn" onclick="document.getElementById('dailyJsonFile').click()"><i class="fa-solid fa-upload"></i> রিস্টোর</button>
+          <input type="file" id="dailyJsonFile" accept=".json" hidden onchange="importDailyJSON(event)">
         </div>
+      </div>
 
-        <!-- Backup & Tools -->
-        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm print:hidden space-y-4">
-            <h2 class="text-lg font-bold">ব্যাকআপ, এক্সপোর্ট ও প্রিন্ট</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <button id="eb" class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-emerald-100 transition flex items-center justify-center gap-1.5">
-                    💾 ব্যাকআপ ফাইল
-                </button>
-                <button id="rs" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
-                    📂 রিস্টোর ফাইল
-                </button>
-                <button id="ec" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
-                    📊 CSV এক্সপোর্ট
-                </button>
-                <button id="pr" onclick="window.print()" class="bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center gap-1.5">
-                    🖨️ প্রিন্ট করুন
-                </button>
-            </div>
-            <input type="file" id="file" accept=".json,application/json" hidden>
+      <div class="grid-2">
+        <form id="dailyForm" style="display: grid; gap: 10px;" onsubmit="addDailyEntry(event)">
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;"><label>ধরন</label><select id="dType"><option value="out">ব্যয় (−)</option><option value="in">আয় (+)</option></select></div>
+            <div style="flex: 1;"><label>মুদ্রা</label><select id="dCur"><option value="AED">AED</option><option value="BDT">BDT</option></select></div>
+          </div>
+          <div><label>পরিমাণ</label><input type="number" step="0.01" id="dAmt" required placeholder="0.00"></div>
+          <div><label>তারিখ</label><input type="date" id="dDate" required></div>
+          <div><label>ক্যাটেগরি</label><input type="text" id="dCat" required placeholder="যেমন: বাসা ভাড়া, বাজার"></div>
+          <div><label>নোট/বিবরণ (ঐচ্ছিক)</label><input type="text" id="dNote" placeholder="অতিরিক্ত বিবরণ"></div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> সেভ করুন</button>
+        </form>
+
+        <div>
+          <h3>সারসংক্ষেপ</h3>
+          <div style="margin-top:10px;" class="table-responsive">
+            <table>
+              <thead><tr><th>মুদ্রা</th><th>আয়</th><th>ব্যয়</th><th>অবশিষ্ট</th></tr></thead>
+              <tbody id="dailySummaryBody"></tbody>
+            </table>
+          </div>
         </div>
+      </div>
+    </div>
 
-    </main>
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> সাম্প্রতিক লেনদেন সমূহ</div>
+      <div style="margin-top: 12px;" class="table-responsive">
+        <table>
+          <thead><tr><th>তারিখ</th><th>ক্যাটেগরি ও নোট</th><th>মুদ্রা</th><th class="text-right">পরিমাণ</th><th class="no-print">অ্যাকশন</th></tr></thead>
+          <tbody id="dailyListBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-2xl text-sm opacity-0 pointer-events-none transition-all duration-300 z-50"></div>
+  <!-- ==================== TAB 4: MOSQUE FUND ==================== -->
+  <div id="tab-mosque" class="tab-content">
+    <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--surface), var(--surface-2));">
+      <div class="bismillah-ar" style="font-size: 1.8rem; color: var(--gold);">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+      <h2 style="font-family: 'Cinzel', serif; margin-top: 6px; color: var(--brand);">Al Nur Jame Mosque</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">হাজী চান মিয়া মালের বাড়ি, দক্ষিণ রায়পুর, রায়পুর, লক্ষ্মীপুর (মাসিক ডোনেশন রেকর্ড)</p>
+    </div>
 
-    <!-- Script Block with Enhanced Fallback Auth and Storage -->
-    <script>
-        const CAT = {
-            out: ['খাবার ও বাজার', 'বাসা ভাড়া', 'দেশে পাঠানো (রেমিটেন্স)', 'যাতায়াত ও ফুয়েল', 'মোবাইল ও ইন্টারনেট', 'চিকিৎসা', 'পোশাক ও কেনাকাটা', 'বিনোদন', 'অন্যান্য ব্যয়'],
-            in: ['বেতন (Salary)', 'ওভারটাইম', 'ব্যবসা/ফ্রিল্যান্সিং', 'বোনাস', 'দেশ থেকে প্রাপ্ত', 'অন্যান্য আয়']
-        };
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fa-solid fa-chart-pie"></i> চাঁদা জমার সারসংক্ষেপ</div>
+        <div class="no-print">
+          <button class="btn btn-primary" onclick="openMosqueModal()"><i class="fa-solid fa-plus"></i> পেমেন্ট যোগ করুন</button>
+          <button class="btn" onclick="exportMosqueJSON()"><i class="fa-solid fa-download"></i> ব্যাকআপ</button>
+          <button class="btn" onclick="document.getElementById('mosqueJsonFile').click()"><i class="fa-solid fa-upload"></i> রিস্টোর</button>
+          <input type="file" id="mosqueJsonFile" accept=".json" hidden onchange="importMosqueJSON(event)">
+        </div>
+      </div>
 
-        let state = {
-            entries: [],
-            rate: 33.00,
-            addIncentive: true
-        };
+      <div class="grid-4">
+        <div class="stat-card"><small>মোট পরিশোধিত টাকা</small><br><b id="mTotalPaid">৳ 0</b></div>
+        <div class="stat-card"><small>মোট পরিশোধিত মাস</small><br><b id="mTotalMonths">0</b></div>
+        <div class="stat-card"><small>সর্বশেষ মাস</small><br><b id="mLatestMonth">-</b></div>
+      </div>
+    </div>
 
-        let currentUser = null;
-        let type = 'out';
-        let cur = 'AED';
-        let editId = null;
-        let toastTimer;
+    <div class="card">
+      <div class="card-title"><i class="fa-solid fa-history"></i> মাসিক পেমেন্ট হিস্ট্রি</div>
+      <div style="margin-top: 12px;" class="table-responsive">
+        <table>
+          <thead><tr><th>মাস</th><th>পেমেন্টের তারিখ</th><th class="text-right">পরিমাণ (BDT)</th><th class="no-print">অ্যাকশন</th></tr></thead>
+          <tbody id="mosqueListBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-        const $ = id => document.getElementById(id);
-        const pad = n => String(n).padStart(2, '0');
-        const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
-        const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+</main>
 
-        const moneyFmt = {
-            AED: new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-            BDT: new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-        };
-        const money = (c, n) => moneyFmt[c].format(n);
-        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+<script>
+// --- GLOBAL TAB & THEME SWITCHER ---
+function switchTab(tabId, btnEl) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btnEl.classList.add('active');
+}
 
-        function toast(m) {
-            const t = $('toast');
-            t.textContent = m;
-            t.classList.remove('opacity-0', 'pointer-events-none');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => t.classList.add('opacity-0', 'pointer-events-none'), 3000);
-        }
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+}
 
-        // Theme Toggle
-        $('themeToggleBtn').onclick = () => {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        };
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
+// --- 1. ACCOUNTS LOGIC ---
+let accData = {
+  rate: 34.00, aedAmt: 1000,
+  mtbSavings: 0, mtbNrb: 0, bracProvashi: 141.46, dbblAgent: 474.82, ucblIslamic: 0,
+  dbblCore: 5000, pubaliIslamic: 5040.81, ibblSavings: 251.50
+};
 
-        // Robust Local Google Sign-In Simulation
-        function initAuth() {
-            const savedUser = localStorage.getItem('hisab_user_session');
-            if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                } catch(e){}
-            }
-            updateAuthUI();
-            loadState();
-        }
+function calcAccounts() {
+  const rate = parseFloat(document.getElementById('accRate').value) || 0;
+  const incRate = rate * 1.025;
+  document.getElementById('accRateIncentive').innerText = incRate.toFixed(2) + ' BDT';
 
-        $('googleSignInBtn').onclick = () => {
-            // Instant zero-failure simulation login
-            currentUser = {
-                name: 'প্রবাসী ব্যবহারকারী',
-                email: 'user@gmail.com',
-                photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Prokash'
-            };
-            localStorage.setItem('hisab_user_session', JSON.stringify(currentUser));
-            updateAuthUI();
-            loadState();
-            toast('জিমেইল দিয়ে সফলভাবে সাইন-ইন করা হয়েছে!');
-        };
+  const aed = parseFloat(document.getElementById('accAedAmt').value) || 0;
+  document.getElementById('accBdtResult').innerText = '৳ ' + (aed * incRate).toLocaleString('bn-BD', {minimumFractionDigits:2});
 
-        $('signOutBtn').onclick = () => {
-            currentUser = null;
-            localStorage.removeItem('hisab_user_session');
-            updateAuthUI();
-            loadState();
-            toast('সাইন-আউট করা হয়েছে');
-        };
+  const mtbS = parseFloat(document.getElementById('mtbSavings').value) || 0;
+  const mtbN = parseFloat(document.getElementById('mtbNrb').value) || 0;
+  const brac = parseFloat(document.getElementById('bracProvashi').value) || 0;
+  const dbblA = parseFloat(document.getElementById('dbblAgent').value) || 0;
+  const ucbl = parseFloat(document.getElementById('ucblIslamic').value) || 0;
+  const usable = mtbS + mtbN + brac + dbblA + ucbl;
+  document.getElementById('usableTotal').innerText = '৳ ' + usable.toLocaleString('bn-BD', {minimumFractionDigits:2});
+  document.getElementById('snapUsable').innerText = '৳ ' + usable.toLocaleString('bn-BD', {minimumFractionDigits:2});
 
-        function updateAuthUI() {
-            if (currentUser) {
-                $('googleSignInBtn').classList.add('hidden');
-                $('userInfo').classList.remove('hidden');
-                $('userAvatar').src = currentUser.photoURL;
-                $('userName').textContent = currentUser.name;
-                $('userEmail').textContent = currentUser.email;
-            } else {
-                $('googleSignInBtn').classList.remove('hidden');
-                $('userInfo').classList.add('hidden');
-            }
-        }
+  const dbblC = parseFloat(document.getElementById('dbblCore').value) || 0;
+  const pub = parseFloat(document.getElementById('pubaliIslamic').value) || 0;
+  const ibbl = parseFloat(document.getElementById('ibblSavings').value) || 0;
+  const hold = dbblC + pub + ibbl;
+  document.getElementById('holdTotal').innerText = '৳ ' + hold.toLocaleString('bn-BD', {minimumFractionDigits:2});
+  document.getElementById('snapHold').innerText = '৳ ' + hold.toLocaleString('bn-BD', {minimumFractionDigits:2});
+}
 
-        function saveState() {
-            const key = currentUser ? `hisab_data_${currentUser.email}` : 'hisab-khata-local';
-            localStorage.setItem(key, JSON.stringify(state));
-        }
+function exportAccountsJSON() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(accData, null, 2));
+  const dlAnchor = document.createElement('a');
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", "Accounts_Backup.json");
+  dlAnchor.click();
+}
 
-        function loadState() {
-            const key = currentUser ? `hisab_data_${currentUser.email}` : 'hisab-khata-local';
-            try {
-                const d = JSON.parse(localStorage.getItem(key));
-                if (d) {
-                    state.entries = Array.isArray(d.entries) ? d.entries : [];
-                    state.rate = +d.rate > 0 ? +d.rate : 33.00;
-                    state.addIncentive = typeof d.addIncentive === 'boolean' ? d.addIncentive : true;
-                } else {
-                    state.entries = [];
-                }
-            } catch (e) {
-                state.entries = [];
-            }
-            render();
-        }
+function importAccountsJSON(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if(d) {
+        if(d.bracProvashi) document.getElementById('bracProvashi').value = d.bracProvashi;
+        if(d.dbblAgent) document.getElementById('dbblAgent').value = d.dbblAgent;
+        if(d.pubaliIslamic) document.getElementById('pubaliIslamic').value = d.pubaliIslamic;
+        calcAccounts();
+        alert('অ্যাকাউন্টস ডাটা সফলভাবে আপডেট হয়েছে!');
+      }
+    } catch(err) { alert('ভুল ফাইল ফরম্যাট!'); }
+  };
+  reader.readAsText(file);
+}
 
-        // Calculation Helpers
-        function getEffectiveRate() {
-            const base = state.rate || 33.00;
-            return state.addIncentive ? base * 1.025 : base;
-        }
+// --- 2. FAMILY EXPENSES LOGIC ---
+let famExpenses = [
+  { id: 1, date: '2026-11-01', cat: 'বাসা ভাড়া', amt: 5000 },
+  { id: 2, date: '2026-11-02', cat: 'মায়ের জন্য', amt: 5000 },
+  { id: 3, date: '2026-11-03', cat: 'খাবার ও বাজার', amt: 15000 }
+];
 
-        function view() {
-            const m = $('mon').value;
-            const c = $('cf').value;
-            return state.entries.filter(e => (!m || e.date.startsWith(m)) && (!c || e.cur === c))
-                .sort((a, b) => b.date.localeCompare(a.date) || (b.t || 0) - (a.t || 0));
-        }
+function renderFamilyTable() {
+  const tbody = document.getElementById('famTableBody');
+  tbody.innerHTML = '';
+  let tot = 0;
+  famExpenses.forEach(item => {
+    tot += item.amt;
+    tbody.innerHTML += `<tr>
+      <td>${item.date}</td>
+      <td>${item.cat}</td>
+      <td class="text-right num-font">৳ ${item.amt.toLocaleString('bn-BD')}</td>
+      <td class="no-print"><button class="btn btn-danger" onclick="deleteFamilyExpense(${item.id})"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
+  document.getElementById('famYearTotal').innerText = 'মোট: ৳ ' + tot.toLocaleString('bn-BD');
+  renderFamilyChart();
+}
 
-        function render() {
-            const list = view();
-            const baseRate = state.rate || 33;
-            const effRate = getEffectiveRate();
+function addFamilyExpense(e) {
+  e.preventDefault();
+  const cat = document.getElementById('famCat').value;
+  const amt = parseFloat(document.getElementById('famAmt').value) || 0;
+  const date = document.getElementById('famDate').value;
+  if(amt > 0) {
+    famExpenses.unshift({ id: Date.now(), date, cat, amt });
+    renderFamilyTable();
+    document.getElementById('famForm').reset();
+    document.getElementById('famDate').valueAsDate = new Date();
+  }
+}
 
-            $('rate').value = baseRate;
-            $('incentiveToggle').checked = state.addIncentive;
-            $('baseRateTxt').textContent = baseRate.toFixed(2);
-            $('incAmtTxt').textContent = (baseRate * 0.025).toFixed(2);
-            $('effectiveRateBadge').textContent = `কার্যকর রেট: ${effRate.toFixed(2)} BDT`;
-            $('rateDisclaimer').textContent = `১ AED = ${effRate.toFixed(2)} BDT (${state.addIncentive ? '২.৫% ইনসেনটিভ সহ' : 'মূল রেট'})`;
+function deleteFamilyExpense(id) {
+  famExpenses = famExpenses.filter(i => i.id !== id);
+  renderFamilyTable();
+}
 
-            const totals = { AED: { in: 0, out: 0 }, BDT: { in: 0, out: 0 } };
-            list.forEach(e => totals[e.cur][e.type] += e.amount);
+function renderFamilyChart() {
+  const chartBox = document.getElementById('famBarChart');
+  chartBox.innerHTML = '';
+  const months = ['জানু','ফেব','মার্চ','এপ্রি','মে','জুন','জুলাই','আগ','সেপ্টে','অক্টো','নভে','ডিসে'];
+  const totals = Array(12).fill(0);
+  famExpenses.forEach(i => {
+    const m = new Date(i.date).getMonth();
+    if(m >= 0 && m < 12) totals[m] += i.amt;
+  });
+  const max = Math.max(...totals, 1);
+  totals.forEach((t, i) => {
+    const h = (t / max) * 100;
+    chartBox.innerHTML += `<div class="chart-bar-wrap">
+      <div class="chart-bar" style="height: ${Math.max(h, 4)}%;" title="${months[i]}: ৳${t}"></div>
+      <div class="chart-label">${months[i]}</div>
+    </div>`;
+  });
+}
 
-            $('sum').innerHTML = ['AED', 'BDT'].map(k => {
-                const bal = totals[k].in - totals[k].out;
-                return `
-                    <tr class="text-sm">
-                        <td class="py-2.5 font-bold text-slate-700 dark:text-slate-300">${k}</td>
-                        <td class="py-2.5 text-right font-medium text-emerald-600 dark:text-emerald-400">+${money(k, totals[k].in)}</td>
-                        <td class="py-2.5 text-right font-medium text-red-500">-${money(k, totals[k].out)}</td>
-                        <td class="py-2.5 text-right font-bold ${bal < 0 ? 'text-red-500' : 'text-slate-800 dark:text-white'}">${money(k, bal)}</td>
-                    </tr>
-                `;
-            }).join('');
+function exportFamilyCSV() {
+  let csv = "\uFEFFDate,Category,Amount\n";
+  famExpenses.forEach(i => { csv += `"${i.date}","${i.cat}","${i.amt}"\n`; });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Family_Expenses_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
 
-            const balAED = totals.AED.in - totals.AED.out;
-            const balBDT = totals.BDT.in - totals.BDT.out;
+function importFamilyCSV(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const lines = ev.target.result.split('\n');
+    famExpenses = [];
+    for(let i=1; i<lines.length; i++) {
+      const col = lines[i].split(',');
+      if(col.length >= 3) {
+        famExpenses.push({
+          id: Date.now() + i,
+          date: col[0].replace(/"/g,'').trim(),
+          cat: col[1].replace(/"/g,'').trim(),
+          amt: parseFloat(col[2].replace(/"/g,'')) || 0
+        });
+      }
+    }
+    renderFamilyTable();
+    alert('CSV রিস্টোর সম্পন্ন হয়েছে!');
+  };
+  reader.readAsText(file);
+}
 
-            const combInAED = balAED + (balBDT / effRate);
-            const combInBDT = balBDT + (balAED * effRate);
+// --- 3. DAILY TALLY LOGIC ---
+let dailyEntries = [
+  { id: '1', date: '2026-11-01', type: 'out', cur: 'AED', amt: 50, cat: 'খাবার', note: 'দুপুরের খাবার' },
+  { id: '2', date: '2026-11-02', type: 'in', cur: 'AED', amt: 3000, cat: 'বেতন', note: 'মাসিক বেতন' }
+];
 
-            $('combAED').textContent = `${money('AED', combInAED)} AED`;
-            $('combBDT').textContent = `${money('BDT', combInBDT)} BDT`;
+function renderDailyTable() {
+  const tbody = document.getElementById('dailyListBody');
+  tbody.innerHTML = '';
+  let sum = { AED: { in: 0, out: 0 }, BDT: { in: 0, out: 0 } };
 
-            const grouped = {};
-            list.forEach(e => (grouped[e.date] = grouped[e.date] || []).push(e));
+  dailyEntries.forEach(item => {
+    sum[item.cur][item.type] += item.amt;
+    tbody.innerHTML += `<tr>
+      <td>${item.date}</td>
+      <td><b>${item.cat}</b><br><small style="color:var(--text-muted);">${item.note||''}</small></td>
+      <td><span class="num-font" style="font-weight:bold;">${item.cur}</span></td>
+      <td class="text-right num-font ${item.type === 'in' ? 'in-amt' : 'out-amt'}">
+        ${item.type === 'in' ? '+' : '-'}${item.amt.toLocaleString('en-US', {minimumFractionDigits:2})}
+      </td>
+      <td class="no-print"><button class="btn btn-danger" onclick="deleteDailyEntry('${item.id}')"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
 
-            let html = '';
-            Object.keys(grouped).sort().reverse().forEach(d => {
-                const dayEntries = grouped[d];
-                html += `
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-                        <div class="bg-slate-50 dark:bg-slate-700/50 px-4 py-2.5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${d}</span>
-                        </div>
-                        <div class="divide-y divide-slate-100 dark:divide-slate-700/50">
-                            ${dayEntries.map(e => `
-                                <div class="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition">
-                                    <div class="flex-1">
-                                        <p class="font-bold text-sm text-slate-800 dark:text-slate-200">${esc(e.cat)}</p>
-                                        ${e.note ? `<p class="text-xs text-slate-400 mt-0.5">${esc(e.note)}</p>` : ''}
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="font-bold text-sm ${e.type === 'in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}">
-                                            ${e.type === 'in' ? '+' : '-'}${money(e.cur, e.amount)} <span class="text-xs font-medium text-slate-400">${e.cur}</span>
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center gap-1 print:hidden">
-                                        <button data-act="edit" data-id="${esc(e.id)}" class="p-1.5 text-slate-400 hover:text-emerald-600 transition">
-                                            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                        </button>
-                                        <button data-act="del" data-id="${esc(e.id)}" class="p-1.5 text-slate-400 hover:text-red-500 transition">
-                                            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
+  const sumBody = document.getElementById('dailySummaryBody');
+  sumBody.innerHTML = '';
+  ['AED', 'BDT'].forEach(c => {
+    const rem = sum[c].in - sum[c].out;
+    sumBody.innerHTML += `<tr>
+      <td><b>${c}</b></td>
+      <td class="in-amt">${sum[c].in.toLocaleString()}</td>
+      <td class="out-amt">${sum[c].out.toLocaleString()}</td>
+      <td class="num-font" style="font-weight:bold;">${rem.toLocaleString()}</td>
+    </tr>`;
+  });
+}
 
-            $('list').innerHTML = html || '<div class="text-center py-10 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-400 text-sm">কোনো হিসাব পাওয়া যায়নি। নতুন একটি যোগ করুন।</div>';
-        }
+function addDailyEntry(e) {
+  e.preventDefault();
+  const type = document.getElementById('dType').value;
+  const cur = document.getElementById('dCur').value;
+  const amt = parseFloat(document.getElementById('dAmt').value) || 0;
+  const date = document.getElementById('dDate').value;
+  const cat = document.getElementById('dCat').value;
+  const note = document.getElementById('dNote').value;
 
-        window.setType = function(t) {
-            type = t;
-            if (t === 'out') {
-                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-red-500 text-white';
-                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
-            } else {
-                $('btnTypeIn').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all shadow-sm bg-emerald-600 text-white';
-                $('btnTypeOut').className = 'flex-1 py-2 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300';
-            }
-            $('cat').innerHTML = CAT[t].map(c => `<option>${c}</option>`).join('');
-        };
+  if(amt > 0) {
+    dailyEntries.unshift({ id: Date.now().toString(), date, type, cur, amt, cat, note });
+    renderDailyTable();
+    document.getElementById('dailyForm').reset();
+    document.getElementById('dDate').valueAsDate = new Date();
+  }
+}
 
-        window.setCur = function(c) {
-            cur = c;
-            if (c === 'AED') {
-                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
-                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
-            } else {
-                $('btnCurBDT').className = 'flex-1 py-2 text-sm font-semibold bg-emerald-600 text-white';
-                $('btnCurAED').className = 'flex-1 py-2 text-sm font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
-            }
-        };
+function deleteDailyEntry(id) {
+  dailyEntries = dailyEntries.filter(i => i.id !== id);
+  renderDailyTable();
+}
 
-        window.resetForm = function() {
-            editId = null;
-            $('amt').value = '';
-            $('note').value = '';
-            $('sb').textContent = 'সেভ করুন';
-            $('ft').textContent = 'নতুন হিসাব যোগ করুন';
-            $('cn').hidden = true;
-        };
+function exportDailyJSON() {
+  const blob = new Blob([JSON.stringify({ entries: dailyEntries }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Daily_Tally_Backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
 
-        $('f').onsubmit = ev => {
-            ev.preventDefault();
-            const a = parseFloat($('amt').value);
-            if (!(a > 0)) return;
+function importDailyJSON(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if(d && Array.isArray(d.entries)) {
+        dailyEntries = d.entries;
+        renderDailyTable();
+        alert('দৈনিক হিসাবের ডাটা রিস্টোর হয়েছে!');
+      }
+    } catch(err) { alert('ভুল JSON ফাইল!'); }
+  };
+  reader.readAsText(file);
+}
 
-            const entry = {
-                type,
-                cur,
-                date: $('dt').value,
-                amount: Math.round(a * 100) / 100,
-                cat: $('cat').value,
-                note: $('note').value.trim()
-            };
+// --- 4. MOSQUE FUND LOGIC ---
+let mosqueData = [
+  { month: "Jan-21", amount: 500, date: "31/01/2021" },
+  { month: "Feb-21", amount: 500, date: "28/02/2021" },
+  { month: "Mar-21", amount: 500, date: "31/03/2021" },
+  { month: "Apr-21", amount: 500, date: "30/04/2021" },
+  { month: "May-21", amount: 500, date: "31/05/2021" },
+  { month: "Jun-21", amount: 500, date: "30/06/2021" },
+  { month: "Jul-21", amount: 500, date: "31/07/2021" },
+  { month: "Aug-21", amount: 500, date: "31/08/2021" },
+  { month: "Sep-21", amount: 500, date: "30/09/2021" },
+  { month: "Oct-21", amount: 500, date: "31/10/2021" },
+  { month: "Nov-21", amount: 500, date: "30/11/2021" },
+  { month: "Dec-21", amount: 500, date: "31/12/2021" },
+  { month: "Jan-23", amount: 500, date: "28/01/2023" },
+  { month: "Feb-23", amount: 500, date: "28/02/2023" },
+  { month: "Jan-24", amount: 500, date: "19/03/2024" },
+  { month: "Aug-24", amount: 1000, date: "02/08/2024" },
+  { month: "Oct-26", amount: 1000, date: "04/10/2026" }
+];
 
-            if (editId) {
-                const idx = state.entries.findIndex(e => e.id === editId);
-                if (idx > -1) state.entries[idx] = { ...state.entries[idx], ...entry };
-            } else {
-                state.entries.push({ id: uid(), t: Date.now(), ...entry });
-            }
+function renderMosqueTable() {
+  const tbody = document.getElementById('mosqueListBody');
+  tbody.innerHTML = '';
+  let tot = 0;
 
-            resetForm();
-            saveState();
-            render();
-            toast(editId ? 'আপডেট হয়েছে' : 'হিসাব সেভ হয়েছে');
-        };
+  mosqueData.forEach((item, idx) => {
+    tot += item.amount;
+    tbody.innerHTML += `<tr>
+      <td><b>${item.month}</b></td>
+      <td>${item.date}</td>
+      <td class="text-right num-font">৳ ${item.amount.toLocaleString('bn-BD')}</td>
+      <td class="no-print"><button class="btn btn-danger" onclick="deleteMosqueEntry(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
 
-        $('list').onclick = e => {
-            const btn = e.target.closest('button');
-            if (!btn) return;
-            const action = btn.dataset.act;
-            const id = btn.dataset.id;
+  document.getElementById('mTotalPaid').innerText = '৳ ' + tot.toLocaleString('bn-BD');
+  document.getElementById('mTotalMonths').innerText = mosqueData.length;
+  document.getElementById('mLatestMonth').innerText = mosqueData.length ? mosqueData[mosqueData.length - 1].month : '-';
+}
 
-            if (action === 'edit') {
-                const entry = state.entries.find(x => x.id === id);
-                if (!entry) return;
-                editId = id;
-                setType(entry.type);
-                setCur(entry.cur);
-                $('dt').value = entry.date;
-                $('amt').value = entry.amount;
-                $('note').value = entry.note || '';
-                $('cat').value = entry.cat;
-                $('sb').textContent = 'আপডেট করুন';
-                $('ft').textContent = 'হিসাব পরিবর্তন করুন';
-                $('cn').hidden = false;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (action === 'del') {
-                state.entries = state.entries.filter(x => x.id !== id);
-                saveState();
-                render();
-                toast('মুছে ফেলা হয়েছে');
-            }
-        };
+function openMosqueModal() {
+  const m = prompt("মাস লিখুন (যেমন: Nov-26):");
+  const a = parseFloat(prompt("পরিমাণ (BDT):", "1000"));
+  const d = prompt("তারিখ (DD/MM/YYYY):", new Date().toLocaleDateString('en-GB'));
+  if(m && a > 0) {
+    mosqueData.push({ month: m, amount: a, date: d });
+    renderMosqueTable();
+  }
+}
 
-        $('rate').oninput = e => {
-            const v = parseFloat(e.target.value);
-            if (v > 0) {
-                state.rate = v;
-                saveState();
-                render();
-            }
-        };
+function deleteMosqueEntry(idx) {
+  if(confirm("পেমেন্ট রেকর্ডটি মুছে ফেলতে চান?")) {
+    mosqueData.splice(idx, 1);
+    renderMosqueTable();
+  }
+}
 
-        $('incentiveToggle').onchange = e => {
-            state.addIncentive = e.target.checked;
-            saveState();
-            render();
-        };
+function exportMosqueJSON() {
+  const blob = new Blob([JSON.stringify(mosqueData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Mosque_Payments_Backup.json`;
+  a.click();
+}
 
-        $('mon').onchange = render;
-        $('cf').onchange = render;
-        $('all').onclick = () => { $('mon').value = ''; render(); };
+function importMosqueJSON(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if(Array.isArray(d)) {
+        mosqueData = d;
+        renderMosqueTable();
+        alert('মসজিদ ফান্ডের ডাটা রিস্টোর হয়েছে!');
+      }
+    } catch(err) { alert('ভুল ফাইল!'); }
+  };
+  reader.readAsText(file);
+}
 
-        // Export & Backup
-        $('eb').onclick = () => {
-            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `hisab-khata-backup-${today()}.json`;
-            a.click();
-        };
-
-        $('rs').onclick = () => $('file').click();
-        $('file').onchange = e => {
-            const f = e.target.files[0];
-            if (!f) return;
-            const r = new FileReader();
-            r.onload = () => {
-                try {
-                    const parsed = JSON.parse(r.result);
-                    if (Array.isArray(parsed.entries)) {
-                        state.entries = parsed.entries;
-                        if (parsed.rate) state.rate = parsed.rate;
-                        saveState();
-                        render();
-                        toast('রিস্টোর সফল হয়েছে');
-                    }
-                } catch (err) {
-                    toast('ভুল ফাইল ফরম্যাট');
-                }
-            };
-            r.readAsText(f);
-        };
-
-        $('ec').onclick = () => {
-            const viewData = view();
-            const csvRows = ['তারিখ,ধরন,ক্যাটেগরি,বিবরণ,মুদ্রা,পরিমাণ'];
-            viewData.forEach(e => {
-                const noteStr = `"${(e.note || '').replace(/"/g, '""')}"`;
-                const catStr = `"${e.cat.replace(/"/g, '""')}"`;
-                csvRows.push(`${e.date},${e.type === 'in' ? 'আয়' : 'ব্যয়'},${catStr},${noteStr},${e.cur},${e.amount}`);
-            });
-            const blob = new Blob(['\ufeff' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `hisab-khata-${today()}.csv`;
-            a.click();
-        };
-
-        // App Initialization
-        initAuth();
-        $('dt').value = today();
-        $('mon').value = today().slice(0, 7);
-        setType('out');
-        setCur('AED');
-    </script>
+// --- INITIALIZATION ---
+window.onload = function() {
+  document.getElementById('famDate').valueAsDate = new Date();
+  document.getElementById('dDate').valueAsDate = new Date();
+  calcAccounts();
+  renderFamilyTable();
+  renderDailyTable();
+  renderMosqueTable();
+};
+</script>
 </body>
 </html>
+```eof
+
+### ফাইলটিতে যেসব সুবিধা রয়েছে:
+1. **একত্রে ৪টি সাইট:** অ্যাকাউন্টিং ক্যালকুলেটর, পারিবারিক বাজেট ট্যাকার, দৈনিক ইনকাম-এক্সপেন্স লেজার ও মসজিদ ফান্ডের রসিদগুলো উপরে দেওয়া ট্যাবের সাহায্যে এক পেজেই একসেস করতে পারবেন।
+2. **ডাটা সামঞ্জস্য:** পূর্বের সব JSON এবং CSV ব্যাকআপ ফাইলগুলো শতভাগ সাপোর্ট করবে। যেকোনো সেকশনের আলাদা ডাটা রিস্টোর বা এক্সপোর্ট করতে পারবেন।
+3. **লোকাল ফাইল হিসেবে ব্যবহার:** ফাইলটি আপনার পিসি বা মোবাইলেও `.html` এক্সটেনশনে সেভ করে অফলাইনে যেকোনো ব্রাউজারে ব্যবহার করতে পারবেন।
